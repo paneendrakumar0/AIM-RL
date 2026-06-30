@@ -109,6 +109,7 @@ Individual checks:
 ./scripts/smoke_gazebo_launch.sh
 ./scripts/smoke_bringup.sh
 ./scripts/smoke_topic_flow.sh
+./scripts/smoke_rl_training.sh
 ```
 
 The full loop currently validates:
@@ -125,6 +126,7 @@ The full loop currently validates:
 - Gazebo launch.
 - Dry-run bringup.
 - Synthetic camera to trajectory topic flow.
+- PPO model initialization and checkpoint save when Torch/Gymnasium are installed.
 
 ## Optional Dependencies
 

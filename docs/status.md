@@ -13,12 +13,12 @@
 - Dry-run serial bridge encodes clamped joint packets.
 - MoveIt configuration scaffold defines planning group and joint limits.
 - Topic-flow smoke test confirms camera -> target pose -> joint trajectory.
+- CPU PyTorch and Gymnasium are installed for RL trainer initialization.
 
 ## Current Blockers for Live Advanced Modes
 
 - MoveIt 2 is not installed.
 - `gazebo_ros2_control` and ROS 2 controller packages are not installed.
-- Gymnasium and PyTorch are not installed.
 - No physical microcontroller is attached for serial write verification.
 
 ## Next Implementation Targets

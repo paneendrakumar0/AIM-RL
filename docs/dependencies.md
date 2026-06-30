@@ -10,6 +10,8 @@ The current repository validates against ROS 2 Humble with:
 - `robot_state_publisher`
 - `rviz2`
 - `xacro`
+- `cv_bridge`
+- `python3-opencv`
 
 ## Needed for the Next Control Checkpoint
 

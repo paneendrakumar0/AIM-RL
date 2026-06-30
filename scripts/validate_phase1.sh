@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WS_ROOT="${REPO_ROOT}/colcon_ws"
 PKG_ROOT="${WS_ROOT}/src/aim_arm_description"
+CONTROL_PKG_ROOT="${WS_ROOT}/src/aim_arm_control"
 GENERATED_URDF="$(mktemp)"
 GENERATED_CONTROL_URDF="$(mktemp)"
 
@@ -27,6 +28,9 @@ test -f "${PKG_ROOT}/launch/display.launch.py"
 test -f "${PKG_ROOT}/launch/gazebo.launch.py"
 test -f "${PKG_ROOT}/urdf/aim_arm.urdf.xacro"
 test -f "${PKG_ROOT}/worlds/aim_empty.world"
+test -f "${CONTROL_PKG_ROOT}/package.xml"
+test -f "${CONTROL_PKG_ROOT}/CMakeLists.txt"
+test -f "${CONTROL_PKG_ROOT}/src/cartesian_target_node.cpp"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
@@ -108,5 +112,7 @@ PY
 
 cd "${WS_ROOT}"
 colcon build --symlink-install
+
+"${WS_ROOT}/install/aim_arm_control/lib/aim_arm_control/ik_smoke_test"
 
 echo "Phase 1 validation loop passed."

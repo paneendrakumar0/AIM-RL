@@ -9,6 +9,7 @@ Phase 1, Weeks 1-2: build the ROS 2 workspace and first digital twin.
 This repository currently contains:
 
 - `colcon_ws/src/aim_arm_description`: ROS 2 package for a 6-DOF manipulator description.
+- `colcon_ws/src/aim_arm_control`: ROS 2 C++ package for early Cartesian target to joint trajectory commands.
 - `scripts/validate_phase1.sh`: repeatable validation loop for package metadata, URDF generation, XML parsing, and colcon build.
 - `docs/phase1_week1_2.md`: implementation notes and next checks.
 
@@ -26,4 +27,3 @@ source /opt/ros/humble/setup.bash
 source colcon_ws/install/setup.bash
 ros2 launch aim_arm_description display.launch.py
 ```
-

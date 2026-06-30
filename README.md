@@ -40,3 +40,9 @@ source /opt/ros/humble/setup.bash
 source colcon_ws/install/setup.bash
 ros2 run aim_arm_rl rl_smoke_test
 ```
+
+To audit installed dependencies:
+
+```bash
+./scripts/audit_dependencies.sh
+```

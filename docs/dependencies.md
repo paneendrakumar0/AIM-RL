@@ -13,6 +13,12 @@ The current repository validates against ROS 2 Humble with:
 - `cv_bridge`
 - `python3-opencv`
 
+Run the local audit:
+
+```bash
+./scripts/audit_dependencies.sh
+```
+
 ## Needed for the Next Control Checkpoint
 
 Install these before enabling simulated joint controllers:

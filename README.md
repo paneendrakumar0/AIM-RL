@@ -22,7 +22,7 @@ This repository currently contains:
 
 ```bash
 cd /home/paneendra/AIM-RL
-./scripts/validate_phase1.sh
+./scripts/validate_stack.sh
 ```
 
 To visualize the robot after a successful build:

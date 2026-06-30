@@ -21,7 +21,7 @@ Create a clean ROS 2 workspace and a first 6-DOF manipulator URDF that can be pa
 Run:
 
 ```bash
-./scripts/validate_phase1.sh
+./scripts/validate_stack.sh
 ```
 
 The loop verifies:

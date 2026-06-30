@@ -20,6 +20,7 @@ setup(
         "console_scripts": [
             "rl_smoke_test = aim_arm_rl.smoke_test:main",
             "train_ppo = aim_arm_rl.train_ppo:main",
+            "evaluate_policy = aim_arm_rl.evaluate_policy:main",
         ],
     },
 )

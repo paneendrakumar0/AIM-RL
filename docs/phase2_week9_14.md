@@ -8,6 +8,7 @@
 - `train_ppo` console entry point that initializes the trainer once PyTorch is installed.
 - Minimal PPO optimizer-step smoke test.
 - CSV metrics writer for PPO smoke runs.
+- Policy rollout smoke evaluation against `MockArmReachEnv`.
 - Smoke-test coverage for reward direction, crash penalty, environment step shape, and advantage calculation.
 
 ## Current Dependency Gate

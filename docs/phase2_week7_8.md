@@ -18,6 +18,7 @@
 
 - Reward helper with progress reward, touch bonus, and crash penalty.
 - `rl_smoke_test` console script.
+- PPO rollout/reward smoke checks.
 
 ## Dependency Status
 
@@ -34,4 +35,3 @@ The main validation loop builds the package and runs:
 ```bash
 ros2 run aim_arm_rl rl_smoke_test
 ```
-

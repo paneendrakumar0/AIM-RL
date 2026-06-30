@@ -19,7 +19,7 @@ setup(
     entry_points={
         "console_scripts": [
             "rl_smoke_test = aim_arm_rl.smoke_test:main",
+            "train_ppo = aim_arm_rl.train_ppo:main",
         ],
     },
 )
-

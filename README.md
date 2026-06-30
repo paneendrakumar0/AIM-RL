@@ -28,3 +28,11 @@ source /opt/ros/humble/setup.bash
 source colcon_ws/install/setup.bash
 ros2 launch aim_arm_description display.launch.py
 ```
+
+To run the current validation smoke tests:
+
+```bash
+source /opt/ros/humble/setup.bash
+source colcon_ws/install/setup.bash
+ros2 run aim_arm_rl rl_smoke_test
+```

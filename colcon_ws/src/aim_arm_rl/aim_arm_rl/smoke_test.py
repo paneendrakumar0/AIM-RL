@@ -1,6 +1,7 @@
 import numpy as np
 
 from aim_arm_rl.env import MockArmReachEnv, compute_reward
+from aim_arm_rl.ppo import PPOConfig, RolloutBuffer
 
 
 def main() -> int:
@@ -28,6 +29,14 @@ def main() -> int:
     if terminated and truncated:
         raise RuntimeError("Environment cannot terminate and truncate on first step")
 
+    config = PPOConfig(rollout_steps=4, minibatch_size=2)
+    buffer = RolloutBuffer(config)
+    buffer.add(observation, np.zeros(6, dtype=np.float32), 1.0, False, 0.5, -0.1)
+    buffer.add(next_observation, action, 0.5, True, 0.2, -0.2)
+    advantages = buffer.compute_advantages()
+    if advantages.shape != (2,):
+        raise RuntimeError("Rollout advantages have invalid shape")
+
     print(
         "RL smoke test passed: "
         f"initial_distance={info['distance']:.3f}, "
@@ -38,4 +47,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

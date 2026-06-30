@@ -4,7 +4,13 @@ import numpy as np
 
 from aim_arm_rl.env import MockArmReachEnv
 from aim_arm_rl.metrics import append_metrics
-from aim_arm_rl.ppo import PPOConfig, TorchUnavailableError, build_actor_critic, require_torch
+from aim_arm_rl.ppo import (
+    PPOConfig,
+    TorchUnavailableError,
+    build_actor_critic,
+    require_torch,
+    seed_everything,
+)
 
 
 def main() -> int:
@@ -13,6 +19,7 @@ def main() -> int:
 
     try:
         torch = require_torch()
+        seed_everything(config.seed)
         model = build_actor_critic(config)
     except TorchUnavailableError as exc:
         print(exc)
@@ -58,4 +65,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

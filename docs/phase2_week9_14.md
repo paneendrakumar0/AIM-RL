@@ -9,6 +9,7 @@
 - Minimal PPO optimizer-step smoke test.
 - CSV metrics writer for PPO smoke runs.
 - Policy rollout smoke evaluation against `MockArmReachEnv`.
+- Deterministic Torch/NumPy seeding for repeatable smoke metrics.
 - Smoke-test coverage for reward direction, crash penalty, environment step shape, and advantage calculation.
 
 ## Current Dependency Gate

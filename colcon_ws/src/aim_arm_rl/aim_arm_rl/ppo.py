@@ -27,6 +27,7 @@ class PPOConfig:
     minibatch_size: int = 256
     update_epochs: int = 10
     device: str = "cuda"
+    seed: int = 7
 
 
 class RolloutBuffer:
@@ -87,9 +88,18 @@ def require_torch():
     return torch
 
 
+def seed_everything(seed: int) -> None:
+    np.random.seed(seed)
+    torch = require_torch()
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+
 def build_actor_critic(config: Optional[PPOConfig] = None):
     config = config or PPOConfig()
     torch = require_torch()
+    seed_everything(config.seed)
     nn = torch.nn
 
     class ActorCritic(nn.Module):
@@ -143,6 +153,7 @@ def load_checkpoint(path: str, config: Optional[PPOConfig] = None):
 def ppo_update_smoke(config: Optional[PPOConfig] = None) -> float:
     config = config or PPOConfig(rollout_steps=8, minibatch_size=4, update_epochs=1)
     torch = require_torch()
+    seed_everything(config.seed)
     model = build_actor_critic(config)
     optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
     device = next(model.parameters()).device

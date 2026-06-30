@@ -52,3 +52,9 @@ To smoke-test dry-run bringup:
 ```bash
 ./scripts/smoke_bringup.sh
 ```
+
+To verify synthetic camera-to-trajectory topic flow:
+
+```bash
+./scripts/smoke_topic_flow.sh
+```

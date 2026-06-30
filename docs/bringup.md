@@ -37,6 +37,12 @@ Smoke-test the launch:
 ./scripts/smoke_bringup.sh
 ```
 
+Smoke-test the synthetic camera to trajectory topic path:
+
+```bash
+./scripts/smoke_topic_flow.sh
+```
+
 To point at a real microcontroller later:
 
 ```bash

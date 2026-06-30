@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="aim_arm">
+  <xacro:arg name="enable_ros2_control" default="false"/>
+  <xacro:arg name="ros2_control_config" default="package://aim_arm_description/config/ros2_controllers.yaml"/>
+
   <xacro:property name="aim_pi" value="3.141592653589793"/>
 
   <xacro:property name="base_height" value="0.12"/>
@@ -279,4 +282,66 @@
   </joint>
 
   <link name="tool0"/>
+
+  <xacro:if value="$(arg enable_ros2_control)">
+    <ros2_control name="AimArmSystem" type="system">
+      <hardware>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </hardware>
+      <joint name="shoulder_pan_joint">
+        <command_interface name="position">
+          <param name="min">-3.14159</param>
+          <param name="max">3.14159</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="shoulder_lift_joint">
+        <command_interface name="position">
+          <param name="min">-2.35619</param>
+          <param name="max">2.35619</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="elbow_joint">
+        <command_interface name="position">
+          <param name="min">-2.61799</param>
+          <param name="max">2.61799</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="wrist_pitch_joint">
+        <command_interface name="position">
+          <param name="min">-3.14159</param>
+          <param name="max">3.14159</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="wrist_roll_joint">
+        <command_interface name="position">
+          <param name="min">-3.14159</param>
+          <param name="max">3.14159</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="wrist_yaw_joint">
+        <command_interface name="position">
+          <param name="min">-3.14159</param>
+          <param name="max">3.14159</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+
+    <gazebo>
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+        <parameters>$(arg ros2_control_config)</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:if>
 </robot>

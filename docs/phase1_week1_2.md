@@ -13,6 +13,7 @@ Create a clean ROS 2 workspace and a first 6-DOF manipulator URDF that can be pa
 - Joint limits for six revolute joints and a fixed tool frame.
 - RViz launch path for visual inspection.
 - Gazebo Classic launch path and a simple workspace table world.
+- Optional `ros2_control`/Gazebo controller description, kept disabled by default until dependencies are installed.
 - Validation script for repeatable checks.
 
 ## Validation Loop
@@ -31,10 +32,11 @@ The loop verifies:
 - Generated URDF is valid XML.
 - Core robot model counts are present.
 - `colcon build` succeeds for the workspace.
+- Optional controller-enabled Xacro expansion remains valid XML.
 
 ## Next Phase 1 Work
 
-- Add `ros2_control` transmissions and controllers.
+- Install `gazebo_ros2_control` and run a live controller-manager simulation test.
 - Add a MoveIt 2 configuration package.
 - Add a C++ target pose planning node after the MoveIt package exists.
 

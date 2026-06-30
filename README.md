@@ -217,4 +217,4 @@ Current blockers for advanced live execution:
 
 ## License
 
-MIT.
+MIT. See [LICENSE](LICENSE).

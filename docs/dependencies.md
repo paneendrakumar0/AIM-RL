@@ -38,5 +38,7 @@ xacro colcon_ws/src/aim_arm_description/urdf/aim_arm.urdf.xacro enable_ros2_cont
 The Phase 2 bridge can build without Gymnasium/PyTorch, but real RL training needs:
 
 ```bash
-python3 -m pip install -r requirements-rl.txt
+./scripts/install_rl_cpu_dependencies.sh
 ```
+
+Use `requirements-rl.txt` only when you explicitly want the default PyTorch resolver. The CPU installer is the safer development default because it avoids downloading large CUDA wheels unless you choose that path.

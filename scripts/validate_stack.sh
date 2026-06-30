@@ -41,6 +41,7 @@ test -f "${RL_PKG_ROOT}/aim_arm_rl/env.py"
 test -f "${PERCEPTION_PKG_ROOT}/package.xml"
 test -f "${PERCEPTION_PKG_ROOT}/setup.py"
 test -f "${PERCEPTION_PKG_ROOT}/aim_arm_perception/target_detector.py"
+test -f "${PERCEPTION_PKG_ROOT}/aim_arm_perception/synthetic_camera_node.py"
 test -f "${HARDWARE_PKG_ROOT}/package.xml"
 test -f "${HARDWARE_PKG_ROOT}/src/serial_bridge_node.cpp"
 test -f "${BRINGUP_PKG_ROOT}/package.xml"
@@ -138,4 +139,3 @@ ros2 run aim_arm_rl rl_smoke_test
 ros2 run aim_arm_perception perception_smoke_test
 
 echo "AIM-RL stack validation loop passed."
-

@@ -19,8 +19,8 @@ setup(
     entry_points={
         "console_scripts": [
             "target_tracker_node = aim_arm_perception.target_tracker_node:main",
+            "synthetic_camera_node = aim_arm_perception.synthetic_camera_node:main",
             "perception_smoke_test = aim_arm_perception.smoke_test:main",
         ],
     },
 )
-

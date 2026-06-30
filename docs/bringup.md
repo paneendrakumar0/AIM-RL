@@ -5,6 +5,7 @@
 The bringup launch starts:
 
 - `robot_state_publisher`
+- `synthetic_camera_node`
 - `target_tracker_node`
 - `cartesian_target_node`
 - `serial_bridge_node` in dry-run mode
@@ -21,6 +22,7 @@ This connects the intended topic chain:
 
 ```text
 /camera/image_raw
+  <- synthetic camera frames by default
   -> aim_arm_perception
 /aim_arm/target_pose
   -> aim_arm_control
@@ -35,3 +37,8 @@ To point at a real microcontroller later:
 ros2 launch aim_arm_bringup software_pipeline.launch.py dry_run:=false serial_port:=/dev/ttyUSB0
 ```
 
+To use a real camera topic instead of the synthetic publisher:
+
+```bash
+ros2 launch aim_arm_bringup software_pipeline.launch.py use_synthetic_camera:=false image_topic:=/your/camera/topic
+```

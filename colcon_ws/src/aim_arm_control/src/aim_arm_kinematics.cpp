@@ -73,6 +73,9 @@ std::optional<JointSolution> solveGeometricIk(
   if (elbow < -2.61799 || elbow > 2.61799) {
     return std::nullopt;
   }
+  if (wrist_pitch < -kPi || wrist_pitch > kPi) {
+    return std::nullopt;
+  }
 
   return JointSolution{{
     shoulder_pan,
@@ -85,4 +88,3 @@ std::optional<JointSolution> solveGeometricIk(
 }
 
 }  // namespace aim_arm_control
-

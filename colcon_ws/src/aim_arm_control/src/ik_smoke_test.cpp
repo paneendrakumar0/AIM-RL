@@ -23,6 +23,11 @@ int main()
     return EXIT_FAILURE;
   }
 
+  const aim_arm_control::CartesianTarget too_close{0.05, 0.0, 0.35};
+  if (aim_arm_control::solveGeometricIk(too_close)) {
+    std::cerr << "Expected too-close target produced IK\n";
+    return EXIT_FAILURE;
+  }
+
   return EXIT_SUCCESS;
 }
-

@@ -115,6 +115,7 @@ Individual checks:
 ./scripts/validate_stack.sh
 ./scripts/audit_dependencies.sh
 ./scripts/smoke_gazebo_launch.sh
+./scripts/smoke_controlled_gazebo.sh
 ./scripts/smoke_bringup.sh
 ./scripts/smoke_topic_flow.sh
 ./scripts/smoke_rl_training.sh
@@ -133,6 +134,7 @@ The full loop currently validates:
 - RL environment smoke test.
 - OpenCV perception smoke test.
 - Gazebo launch.
+- Controlled Gazebo launch and controller spawning when ROS 2 control packages are installed.
 - Dry-run bringup.
 - Synthetic camera to trajectory topic flow.
 - PPO model initialization and checkpoint save when Torch/Gymnasium are installed.

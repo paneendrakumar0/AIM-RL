@@ -8,6 +8,7 @@ source /opt/ros/humble/setup.bash
 source "${REPO_ROOT}/colcon_ws/install/setup.bash"
 set -u
 export ROS_DOMAIN_ID=$((100 + $$ % 100))
+export GAZEBO_MASTER_URI="http://127.0.0.1:$((12000 + $$ % 1000))"
 
 ros2 daemon stop >/dev/null 2>&1 || true
 ros2 daemon start >/dev/null 2>&1 || true
@@ -21,6 +22,7 @@ cleanup() {
     wait "${launch_pid}" >/dev/null 2>&1 || true
   fi
   ros2 daemon stop >/dev/null 2>&1 || true
+  sleep 2
 }
 trap cleanup EXIT
 

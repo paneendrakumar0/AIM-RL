@@ -8,6 +8,7 @@
 - Gazebo world contains an overhead camera and orange target block.
 - Optional `ros2_control` XML expands.
 - Controlled Gazebo launch scaffold is syntax-validated.
+- ROS 2 control and MoveIt dependencies are installed.
 - C++ Cartesian target node publishes six-joint trajectories.
 - Synthetic camera publishes images.
 - OpenCV target tracker publishes `/aim_arm/target_pose`.

@@ -1,6 +1,7 @@
 #include "aim_arm_hardware/serial_packet.hpp"
 
 #include <cmath>
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 
@@ -16,11 +17,26 @@ uint8_t checksum(const std::string & payload)
   return value;
 }
 
+std::array<double, 6> clampJointPositions(const std::array<double, 6> & radians)
+{
+  constexpr std::array<double, 6> lower{
+    -3.14159, -2.35619, -2.61799, -3.14159, -3.14159, -3.14159};
+  constexpr std::array<double, 6> upper{
+    3.14159, 2.35619, 2.61799, 3.14159, 3.14159, 3.14159};
+
+  std::array<double, 6> clamped{};
+  for (std::size_t i = 0; i < radians.size(); ++i) {
+    clamped[i] = std::max(lower[i], std::min(radians[i], upper[i]));
+  }
+  return clamped;
+}
+
 std::string encodeJointPacket(const std::array<double, 6> & radians)
 {
+  const auto clamped_radians = clampJointPositions(radians);
   std::ostringstream payload;
   payload << "AIM";
-  for (const double radian : radians) {
+  for (const double radian : clamped_radians) {
     const long milliradians = std::lround(radian * 1000.0);
     payload << ',' << milliradians;
   }
@@ -34,4 +50,3 @@ std::string encodeJointPacket(const std::array<double, 6> & radians)
 }
 
 }  // namespace aim_arm_hardware
-

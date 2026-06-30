@@ -197,7 +197,6 @@ Current blockers for advanced live execution:
 
 - MoveIt 2 is not installed until optional dependencies are installed.
 - `gazebo_ros2_control` is not installed until optional dependencies are installed.
-- Gymnasium and PyTorch are not installed until optional dependencies are installed.
 - Physical serial write verification needs a connected microcontroller.
 
 ## Documentation

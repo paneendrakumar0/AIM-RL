@@ -21,6 +21,13 @@
 - `gazebo_ros2_control` and ROS 2 controller packages are not installed.
 - No physical microcontroller is attached for serial write verification.
 
+## Recently Unlocked
+
+- Gymnasium is installed.
+- CPU PyTorch is installed.
+- PPO smoke training writes checkpoint and metrics artifacts.
+- Policy evaluation smoke writes rollout metrics.
+
 ## Next Implementation Targets
 
 - Expand MoveIt launch/planning pipelines once MoveIt 2 is installed.

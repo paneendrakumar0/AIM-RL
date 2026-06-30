@@ -1,0 +1,47 @@
+name: Static Checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  static:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Compile Python sources
+        run: |
+          python -m py_compile \
+            colcon_ws/src/aim_arm_bringup/launch/software_pipeline.launch.py \
+            colcon_ws/src/aim_arm_description/launch/display.launch.py \
+            colcon_ws/src/aim_arm_description/launch/gazebo.launch.py \
+            colcon_ws/src/aim_arm_perception/aim_arm_perception/*.py \
+            colcon_ws/src/aim_arm_rl/aim_arm_rl/*.py
+
+      - name: Check tracked shell scripts are executable
+        run: |
+          test -x scripts/audit_dependencies.sh
+          test -x scripts/run_all_checks.sh
+          test -x scripts/smoke_bringup.sh
+          test -x scripts/smoke_topic_flow.sh
+          test -x scripts/validate_phase1.sh
+          test -x scripts/validate_stack.sh
+
+      - name: Check package manifests parse as XML
+        run: |
+          python - <<'PY'
+          import pathlib
+          import xml.etree.ElementTree as ET
+
+          for path in pathlib.Path("colcon_ws/src").glob("*/package.xml"):
+              ET.parse(path)
+              print(f"ok {path}")
+          PY
+

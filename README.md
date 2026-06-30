@@ -65,3 +65,5 @@ To run every local check:
 ```bash
 ./scripts/run_all_checks.sh
 ```
+
+A lightweight GitHub Actions template is available at `docs/ci/static-checks.yml`. Full ROS/Gazebo checks remain local through `./scripts/run_all_checks.sh`.

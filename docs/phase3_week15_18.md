@@ -8,6 +8,7 @@
 - ROS 2 `target_tracker_node` that subscribes to `sensor_msgs/msg/Image`.
 - Publishes detected target coordinates as `geometry_msgs/msg/PoseStamped` on `/aim_arm/target_pose`.
 - Synthetic-image smoke test.
+- Gazebo world includes an overhead camera sensor publishing `/camera/image_raw`.
 
 ## Current Assumption
 
@@ -21,4 +22,3 @@ source colcon_ws/install/setup.bash
 ros2 run aim_arm_perception perception_smoke_test
 ros2 run aim_arm_perception target_tracker_node
 ```
-

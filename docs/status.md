@@ -21,8 +21,6 @@
 
 ## Next Implementation Targets
 
-- Add a real Gazebo camera sensor to the world.
 - Add a MoveIt package once MoveIt 2 is installed.
 - Add a ROS/Gazebo stepping backend for the RL environment once controllers are live.
 - Expand Arduino firmware from parsing-only to actuator pin output once hardware is selected.
-

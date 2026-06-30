@@ -14,6 +14,7 @@ This repository currently contains:
 - `colcon_ws/src/aim_arm_perception`: OpenCV target tracking package for camera-to-target pose publishing.
 - `colcon_ws/src/aim_arm_hardware`: serial bridge package for microcontroller joint commands.
 - `colcon_ws/src/aim_arm_bringup`: launch package for the dry-run software pipeline.
+- `colcon_ws/src/aim_arm_moveit_config`: MoveIt planning configuration scaffold.
 - `firmware/aim_arm_serial_driver`: Arduino-side packet parser scaffold.
 - `artifacts/`: ignored local runtime outputs such as training checkpoints.
 

@@ -9,6 +9,7 @@ RL_PKG_ROOT="${WS_ROOT}/src/aim_arm_rl"
 PERCEPTION_PKG_ROOT="${WS_ROOT}/src/aim_arm_perception"
 HARDWARE_PKG_ROOT="${WS_ROOT}/src/aim_arm_hardware"
 BRINGUP_PKG_ROOT="${WS_ROOT}/src/aim_arm_bringup"
+MOVEIT_PKG_ROOT="${WS_ROOT}/src/aim_arm_moveit_config"
 GENERATED_URDF="$(mktemp)"
 GENERATED_CONTROL_URDF="$(mktemp)"
 
@@ -46,6 +47,8 @@ test -f "${HARDWARE_PKG_ROOT}/package.xml"
 test -f "${HARDWARE_PKG_ROOT}/src/serial_bridge_node.cpp"
 test -f "${BRINGUP_PKG_ROOT}/package.xml"
 test -f "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"
+test -f "${MOVEIT_PKG_ROOT}/package.xml"
+test -f "${MOVEIT_PKG_ROOT}/config/aim_arm.srdf"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
@@ -58,13 +61,14 @@ python3 -m py_compile \
   "${PKG_ROOT}/launch/gazebo.launch.py" \
   "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"
 
-python3 - "${GENERATED_URDF}" "${GENERATED_CONTROL_URDF}" "${PKG_ROOT}/worlds/aim_empty.world" <<'PY'
+python3 - "${GENERATED_URDF}" "${GENERATED_CONTROL_URDF}" "${PKG_ROOT}/worlds/aim_empty.world" "${MOVEIT_PKG_ROOT}/config/aim_arm.srdf" <<'PY'
 import sys
 import xml.etree.ElementTree as ET
 
 urdf_path = sys.argv[1]
 control_urdf_path = sys.argv[2]
 world_path = sys.argv[3]
+srdf_path = sys.argv[4]
 
 root = ET.parse(urdf_path).getroot()
 
@@ -124,6 +128,17 @@ if world_root.tag != "sdf":
 if world_root.find("world") is None:
     raise SystemExit("Gazebo world does not contain a <world> element")
 print("Gazebo world XML validation passed.")
+
+srdf_root = ET.parse(srdf_path).getroot()
+if srdf_root.tag != "robot":
+    raise SystemExit("SRDF root element is not <robot>")
+group = srdf_root.find("group[@name='arm']")
+if group is None:
+    raise SystemExit("SRDF is missing arm planning group")
+chain = group.find("chain")
+if chain is None or chain.attrib.get("base_link") != "base_link" or chain.attrib.get("tip_link") != "tool0":
+    raise SystemExit("SRDF arm group chain is invalid")
+print("MoveIt SRDF validation passed.")
 PY
 
 cd "${WS_ROOT}"

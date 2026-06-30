@@ -11,6 +11,7 @@
 - Synthetic camera publishes images.
 - OpenCV target tracker publishes `/aim_arm/target_pose`.
 - Dry-run serial bridge encodes clamped joint packets.
+- MoveIt configuration scaffold defines planning group and joint limits.
 - Topic-flow smoke test confirms camera -> target pose -> joint trajectory.
 
 ## Current Blockers for Live Advanced Modes
@@ -22,6 +23,6 @@
 
 ## Next Implementation Targets
 
-- Add a MoveIt package once MoveIt 2 is installed.
+- Expand MoveIt launch/planning pipelines once MoveIt 2 is installed.
 - Add a ROS/Gazebo stepping backend for the RL environment once controllers are live.
 - Expand Arduino firmware from parsing-only to actuator pin output once hardware is selected.

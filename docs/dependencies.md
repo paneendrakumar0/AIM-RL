@@ -31,3 +31,10 @@ After installation, the model can be expanded with:
 xacro colcon_ws/src/aim_arm_description/urdf/aim_arm.urdf.xacro enable_ros2_control:=true
 ```
 
+## Needed for Reinforcement Learning Training
+
+The Phase 2 bridge can build without Gymnasium/PyTorch, but real RL training needs:
+
+```bash
+python3 -m pip install -r requirements-rl.txt
+```

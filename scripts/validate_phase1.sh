@@ -5,6 +5,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WS_ROOT="${REPO_ROOT}/colcon_ws"
 PKG_ROOT="${WS_ROOT}/src/aim_arm_description"
 CONTROL_PKG_ROOT="${WS_ROOT}/src/aim_arm_control"
+RL_PKG_ROOT="${WS_ROOT}/src/aim_arm_rl"
 GENERATED_URDF="$(mktemp)"
 GENERATED_CONTROL_URDF="$(mktemp)"
 
@@ -31,6 +32,9 @@ test -f "${PKG_ROOT}/worlds/aim_empty.world"
 test -f "${CONTROL_PKG_ROOT}/package.xml"
 test -f "${CONTROL_PKG_ROOT}/CMakeLists.txt"
 test -f "${CONTROL_PKG_ROOT}/src/cartesian_target_node.cpp"
+test -f "${RL_PKG_ROOT}/package.xml"
+test -f "${RL_PKG_ROOT}/setup.py"
+test -f "${RL_PKG_ROOT}/aim_arm_rl/env.py"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
@@ -113,6 +117,11 @@ PY
 cd "${WS_ROOT}"
 colcon build --symlink-install
 
+set +u
+source "${WS_ROOT}/install/setup.bash"
+set -u
+
 "${WS_ROOT}/install/aim_arm_control/lib/aim_arm_control/ik_smoke_test"
+ros2 run aim_arm_rl rl_smoke_test
 
 echo "Phase 1 validation loop passed."

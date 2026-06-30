@@ -1,0 +1,4 @@
+gymnasium>=0.29,<1.0
+torch>=2.3
+numpy>=1.26
+

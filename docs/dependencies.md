@@ -24,13 +24,7 @@ Run the local audit:
 Install these before enabling simulated joint controllers:
 
 ```bash
-sudo apt update
-sudo apt install \
-  ros-humble-ros2-control \
-  ros-humble-ros2-controllers \
-  ros-humble-gazebo-ros2-control \
-  ros-humble-joint-trajectory-controller \
-  ros-humble-joint-state-broadcaster
+./scripts/install_optional_dependencies.sh
 ```
 
 After installation, the model can be expanded with:

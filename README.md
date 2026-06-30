@@ -50,6 +50,12 @@ To audit installed dependencies:
 ./scripts/audit_dependencies.sh
 ```
 
+To install optional control, MoveIt, and RL training dependencies:
+
+```bash
+./scripts/install_optional_dependencies.sh
+```
+
 To smoke-test dry-run bringup:
 
 ```bash

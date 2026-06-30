@@ -54,3 +54,9 @@ To use a real camera topic instead of the synthetic publisher:
 ```bash
 ros2 launch aim_arm_bringup software_pipeline.launch.py use_synthetic_camera:=false image_topic:=/your/camera/topic
 ```
+
+To keep synthetic frames fixed for repeatable debugging:
+
+```bash
+ros2 launch aim_arm_bringup software_pipeline.launch.py synthetic_camera_moving:=false
+```

@@ -12,7 +12,9 @@ export ROS_DOMAIN_ID=$((100 + $$ % 100))
 ros2 daemon stop >/dev/null 2>&1 || true
 ros2 daemon start >/dev/null 2>&1 || true
 
-ros2 launch aim_arm_bringup software_pipeline.launch.py > /tmp/aim_rl_topic_flow.log 2>&1 &
+ros2 launch aim_arm_bringup software_pipeline.launch.py \
+  synthetic_camera_moving:=false \
+  > /tmp/aim_rl_topic_flow.log 2>&1 &
 launch_pid=$!
 
 cleanup() {

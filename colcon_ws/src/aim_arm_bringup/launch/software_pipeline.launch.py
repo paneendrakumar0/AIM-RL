@@ -11,6 +11,7 @@ def generate_launch_description():
     dry_run = LaunchConfiguration("dry_run")
     serial_port = LaunchConfiguration("serial_port")
     use_synthetic_camera = LaunchConfiguration("use_synthetic_camera")
+    synthetic_camera_moving = LaunchConfiguration("synthetic_camera_moving")
 
     xacro_file = PathJoinSubstitution(
         [FindPackageShare("aim_arm_description"), "urdf", "aim_arm.urdf.xacro"]
@@ -39,6 +40,11 @@ def generate_launch_description():
                 default_value="true",
                 description="Publish synthetic target frames for dry-run demos.",
             ),
+            DeclareLaunchArgument(
+                "synthetic_camera_moving",
+                default_value="true",
+                description="Animate the synthetic target horizontally.",
+            ),
             Node(
                 package="robot_state_publisher",
                 executable="robot_state_publisher",
@@ -49,7 +55,12 @@ def generate_launch_description():
                 package="aim_arm_perception",
                 executable="synthetic_camera_node",
                 condition=IfCondition(use_synthetic_camera),
-                parameters=[{"image_topic": image_topic}],
+                parameters=[
+                    {
+                        "image_topic": image_topic,
+                        "moving": synthetic_camera_moving,
+                    }
+                ],
                 output="screen",
             ),
             Node(

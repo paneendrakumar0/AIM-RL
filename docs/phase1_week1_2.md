@@ -12,6 +12,7 @@ Create a clean ROS 2 workspace and a first 6-DOF manipulator URDF that can be pa
 - Physical properties for every moving link: mass, inertia, visuals, and collisions.
 - Joint limits for six revolute joints and a fixed tool frame.
 - RViz launch path for visual inspection.
+- Gazebo Classic launch path and a simple workspace table world.
 - Validation script for repeatable checks.
 
 ## Validation Loop
@@ -33,8 +34,18 @@ The loop verifies:
 
 ## Next Phase 1 Work
 
-- Add Gazebo/Ignition simulation launch files.
 - Add `ros2_control` transmissions and controllers.
 - Add a MoveIt 2 configuration package.
 - Add a C++ target pose planning node after the MoveIt package exists.
 
+## Simulation Preview
+
+Run:
+
+```bash
+source /opt/ros/humble/setup.bash
+source colcon_ws/install/setup.bash
+ros2 launch aim_arm_description gazebo.launch.py
+```
+
+This launches Gazebo Classic with `aim_empty.world` and spawns the robot from `robot_description`.

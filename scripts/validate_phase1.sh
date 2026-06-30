@@ -21,16 +21,25 @@ command -v xacro >/dev/null
 
 test -f "${PKG_ROOT}/package.xml"
 test -f "${PKG_ROOT}/CMakeLists.txt"
+test -f "${PKG_ROOT}/launch/display.launch.py"
+test -f "${PKG_ROOT}/launch/gazebo.launch.py"
 test -f "${PKG_ROOT}/urdf/aim_arm.urdf.xacro"
+test -f "${PKG_ROOT}/worlds/aim_empty.world"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 
-python3 - "${GENERATED_URDF}" <<'PY'
+python3 -m py_compile \
+  "${PKG_ROOT}/launch/display.launch.py" \
+  "${PKG_ROOT}/launch/gazebo.launch.py"
+
+python3 - "${GENERATED_URDF}" "${PKG_ROOT}/worlds/aim_empty.world" <<'PY'
 import sys
 import xml.etree.ElementTree as ET
 
-path = sys.argv[1]
-root = ET.parse(path).getroot()
+urdf_path = sys.argv[1]
+world_path = sys.argv[2]
+
+root = ET.parse(urdf_path).getroot()
 
 if root.tag != "robot":
     raise SystemExit("Generated URDF root element is not <robot>")
@@ -65,6 +74,13 @@ print(
     f"URDF validation passed: {len(links)} links, "
     f"{len(revolute_joints)} controlled joints."
 )
+
+world_root = ET.parse(world_path).getroot()
+if world_root.tag != "sdf":
+    raise SystemExit("Gazebo world root element is not <sdf>")
+if world_root.find("world") is None:
+    raise SystemExit("Gazebo world does not contain a <world> element")
+print("Gazebo world XML validation passed.")
 PY
 
 cd "${WS_ROOT}"

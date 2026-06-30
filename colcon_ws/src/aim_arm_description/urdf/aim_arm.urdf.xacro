@@ -106,6 +106,9 @@
     <xacro:cylinder_inertia mass="8.0" radius="${base_radius}" length="${base_height}" axis="z"/>
     <xacro:visual_collision_cylinder radius="${base_radius}" length="${base_height}" material="mat_base"/>
   </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
 
   <joint name="shoulder_pan_joint" type="revolute">
     <parent link="base_link"/>
@@ -120,6 +123,9 @@
     <xacro:cylinder_inertia mass="4.0" radius="0.09" length="${shoulder_height}" axis="z"/>
     <xacro:visual_collision_cylinder radius="0.09" length="${shoulder_height}" material="mat_joint"/>
   </link>
+  <gazebo reference="shoulder_link">
+    <material>Gazebo/White</material>
+  </gazebo>
 
   <joint name="shoulder_lift_joint" type="revolute">
     <parent link="shoulder_link"/>
@@ -146,6 +152,9 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="upper_arm_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
 
   <joint name="elbow_joint" type="revolute">
     <parent link="upper_arm_link"/>
@@ -172,6 +181,9 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="forearm_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
 
   <joint name="wrist_pitch_joint" type="revolute">
     <parent link="forearm_link"/>
@@ -198,6 +210,9 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="wrist_pitch_link">
+    <material>Gazebo/White</material>
+  </gazebo>
 
   <joint name="wrist_roll_joint" type="revolute">
     <parent link="wrist_pitch_link"/>
@@ -224,6 +239,9 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="wrist_roll_link">
+    <material>Gazebo/White</material>
+  </gazebo>
 
   <joint name="wrist_yaw_joint" type="revolute">
     <parent link="wrist_roll_link"/>
@@ -250,6 +268,9 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="tool_link">
+    <material>Gazebo/Orange</material>
+  </gazebo>
 
   <joint name="tool0_fixed_joint" type="fixed">
     <parent link="tool_link"/>

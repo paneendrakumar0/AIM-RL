@@ -41,6 +41,39 @@
       </link>
     </model>
 
+    <model name="target_block">
+      <static>false</static>
+      <pose>0.55 0.10 0.085 0 0 0</pose>
+      <link name="target_link">
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.00002</ixx>
+            <iyy>0.00002</iyy>
+            <izz>0.00002</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.06 0.06 0.06</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.06 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1.0 0.45 0.0 1</ambient>
+            <diffuse>1.0 0.45 0.0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
     <model name="overhead_camera">
       <static>true</static>
       <pose>0.45 0 1.20 0 1.5708 0</pose>

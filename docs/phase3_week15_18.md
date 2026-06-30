@@ -9,6 +9,7 @@
 - Publishes detected target coordinates as `geometry_msgs/msg/PoseStamped` on `/aim_arm/target_pose`.
 - Synthetic-image smoke test.
 - Gazebo world includes an overhead camera sensor publishing `/camera/image_raw`.
+- Gazebo world includes an orange target block for camera tracking.
 
 ## Current Assumption
 

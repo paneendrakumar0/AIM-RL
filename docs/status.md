@@ -5,6 +5,7 @@
 - ROS 2 workspace builds with six packages.
 - 6-DOF URDF/Xacro expands and parses.
 - Gazebo Classic world XML parses.
+- Gazebo world contains an overhead camera and orange target block.
 - Optional `ros2_control` XML expands.
 - C++ Cartesian target node publishes six-joint trajectories.
 - Synthetic camera publishes images.

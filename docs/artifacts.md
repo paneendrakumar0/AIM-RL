@@ -8,3 +8,7 @@ Reserved local paths:
 - `artifacts/logs/`: training logs and metric exports.
 - `artifacts/renders/`: screenshots or videos from simulation.
 
+Current smoke outputs:
+
+- `artifacts/checkpoints/ppo_initial.pt`
+- `artifacts/logs/ppo_smoke.csv`

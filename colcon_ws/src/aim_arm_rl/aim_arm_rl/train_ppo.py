@@ -1,4 +1,5 @@
 from aim_arm_rl.env import MockArmReachEnv
+from aim_arm_rl.metrics import append_metrics
 from aim_arm_rl.ppo import (
     PPOConfig,
     TorchUnavailableError,
@@ -31,6 +32,16 @@ def main() -> int:
     print("Saved initial checkpoint: artifacts/checkpoints/ppo_initial.pt")
     loss = ppo_update_smoke(config)
     print(f"PPO update smoke loss={loss:.6f}")
+    append_metrics(
+        "artifacts/logs/ppo_smoke.csv",
+        {
+            "observation_dim": config.observation_dim,
+            "action_dim": config.action_dim,
+            "device": str(device),
+            "loss": f"{loss:.6f}",
+        },
+    )
+    print("Saved smoke metrics: artifacts/logs/ppo_smoke.csv")
     return 0
 
 

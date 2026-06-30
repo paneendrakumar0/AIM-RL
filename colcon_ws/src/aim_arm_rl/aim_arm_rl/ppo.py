@@ -138,3 +138,32 @@ def load_checkpoint(path: str, config: Optional[PPOConfig] = None):
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     return model
+
+
+def ppo_update_smoke(config: Optional[PPOConfig] = None) -> float:
+    config = config or PPOConfig(rollout_steps=8, minibatch_size=4, update_epochs=1)
+    torch = require_torch()
+    model = build_actor_critic(config)
+    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
+    device = next(model.parameters()).device
+
+    observations = torch.randn(config.minibatch_size, config.observation_dim, device=device)
+    actions = torch.zeros(config.minibatch_size, config.action_dim, device=device)
+    target_values = torch.ones(config.minibatch_size, device=device)
+    advantages = torch.ones(config.minibatch_size, device=device)
+
+    mean, std, values = model(observations)
+    distribution = torch.distributions.Normal(mean, std)
+    log_probs = distribution.log_prob(actions).sum(dim=-1)
+    entropy = distribution.entropy().sum(dim=-1).mean()
+
+    policy_loss = -(log_probs * advantages).mean()
+    value_loss = torch.nn.functional.mse_loss(values, target_values)
+    loss = policy_loss + config.value_coef * value_loss - config.entropy_coef * entropy
+
+    optimizer.zero_grad()
+    loss.backward()
+    torch.nn.utils.clip_grad_norm_(model.parameters(), config.max_grad_norm)
+    optimizer.step()
+
+    return float(loss.detach().cpu().item())

@@ -6,6 +6,7 @@
 - Rollout buffer with Generalized Advantage Estimation.
 - PyTorch actor-critic factory with CUDA preference and CPU fallback.
 - `train_ppo` console entry point that initializes the trainer once PyTorch is installed.
+- Minimal PPO optimizer-step smoke test.
 - Smoke-test coverage for reward direction, crash penalty, environment step shape, and advantage calculation.
 
 ## Current Dependency Gate
@@ -30,4 +31,3 @@ ros2 run aim_arm_rl train_ppo
 - Add checkpoint saving/loading.
 - Replace the mock environment backend with the Gazebo/ROS stepping backend once controllers are live.
 - Add TensorBoard or CSV metrics for reward and success-rate curves.
-

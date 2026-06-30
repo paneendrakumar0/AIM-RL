@@ -46,3 +46,9 @@ To audit installed dependencies:
 ```bash
 ./scripts/audit_dependencies.sh
 ```
+
+To smoke-test dry-run bringup:
+
+```bash
+./scripts/smoke_bringup.sh
+```

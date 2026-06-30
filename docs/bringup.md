@@ -31,6 +31,12 @@ This connects the intended topic chain:
 serial packet dry-run output
 ```
 
+Smoke-test the launch:
+
+```bash
+./scripts/smoke_bringup.sh
+```
+
 To point at a real microcontroller later:
 
 ```bash

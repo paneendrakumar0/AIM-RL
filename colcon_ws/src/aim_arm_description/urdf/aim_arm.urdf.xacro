@@ -124,7 +124,19 @@
 
   <link name="shoulder_link">
     <xacro:cylinder_inertia mass="4.0" radius="0.09" length="${shoulder_height}" axis="z"/>
-    <xacro:visual_collision_cylinder radius="0.09" length="${shoulder_height}" material="mat_joint"/>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <geometry>
+        <mesh filename="package://aim_arm_description/meshes/visual/joint_cap_visual.stl"/>
+      </geometry>
+      <material name="mat_joint"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.09" length="${shoulder_height}"/>
+      </geometry>
+    </collision>
   </link>
   <gazebo reference="shoulder_link">
     <material>Gazebo/White</material>
@@ -142,9 +154,9 @@
   <link name="upper_arm_link">
     <xacro:box_inertia mass="3.2" x="${upper_arm_length}" y="0.08" z="0.08"/>
     <visual>
-      <origin xyz="${upper_arm_length / 2.0} 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="${upper_arm_length} 0.08 0.08"/>
+        <mesh filename="package://aim_arm_description/meshes/visual/upper_arm_visual.stl"/>
       </geometry>
       <material name="mat_link"/>
     </visual>
@@ -171,9 +183,9 @@
   <link name="forearm_link">
     <xacro:box_inertia mass="2.4" x="${forearm_length}" y="0.065" z="0.065"/>
     <visual>
-      <origin xyz="${forearm_length / 2.0} 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="${forearm_length} 0.065 0.065"/>
+        <mesh filename="package://aim_arm_description/meshes/visual/forearm_visual.stl"/>
       </geometry>
       <material name="mat_link"/>
     </visual>
@@ -200,9 +212,9 @@
   <link name="wrist_pitch_link">
     <xacro:cylinder_inertia mass="0.9" radius="0.055" length="${wrist_length}" axis="x"/>
     <visual>
-      <origin xyz="${wrist_length / 2.0} 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <origin xyz="${wrist_length / 2.0} 0 0" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.055" length="${wrist_length}"/>
+        <mesh filename="package://aim_arm_description/meshes/visual/wrist_visual.stl" scale="0.875 1 1"/>
       </geometry>
       <material name="mat_joint"/>
     </visual>
@@ -229,9 +241,9 @@
   <link name="wrist_roll_link">
     <xacro:cylinder_inertia mass="0.7" radius="0.045" length="0.10" axis="x"/>
     <visual>
-      <origin xyz="0.05 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.045" length="0.10"/>
+        <mesh filename="package://aim_arm_description/meshes/visual/wrist_visual.stl" scale="0.625 0.9 0.9"/>
       </geometry>
       <material name="mat_joint"/>
     </visual>
@@ -258,9 +270,9 @@
   <link name="tool_link">
     <xacro:box_inertia mass="0.4" x="${tool_length}" y="0.04" z="0.04"/>
     <visual>
-      <origin xyz="${tool_length / 2.0} 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="${tool_length} 0.04 0.04"/>
+        <mesh filename="package://aim_arm_description/meshes/visual/tool_visual.stl" scale="0.625 1 1"/>
       </geometry>
       <material name="mat_tool"/>
     </visual>

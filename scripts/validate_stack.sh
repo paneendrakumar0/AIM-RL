@@ -32,6 +32,10 @@ test -f "${PKG_ROOT}/config/ros2_controllers.yaml"
 test -f "${PKG_ROOT}/launch/controlled_gazebo.launch.py"
 test -f "${PKG_ROOT}/launch/display.launch.py"
 test -f "${PKG_ROOT}/launch/gazebo.launch.py"
+test -f "${PKG_ROOT}/meshes/visual/upper_arm_visual.stl"
+test -f "${PKG_ROOT}/meshes/visual/forearm_visual.stl"
+test -f "${PKG_ROOT}/meshes/visual/wrist_visual.stl"
+test -f "${PKG_ROOT}/meshes/visual/tool_visual.stl"
 test -f "${PKG_ROOT}/urdf/aim_arm.urdf.xacro"
 test -f "${PKG_ROOT}/worlds/aim_empty.world"
 test -f "${CONTROL_PKG_ROOT}/package.xml"
@@ -103,9 +107,14 @@ for joint in revolute_joints:
     if joint.find("limit") is None:
         raise SystemExit(f"Joint {joint.attrib['name']} is missing limits")
 
+mesh_visuals = root.findall(".//visual/geometry/mesh")
+if len(mesh_visuals) < 5:
+    raise SystemExit(f"Expected at least 5 visual meshes, found {len(mesh_visuals)}")
+
 print(
     f"URDF validation passed: {len(links)} links, "
-    f"{len(revolute_joints)} controlled joints."
+    f"{len(revolute_joints)} controlled joints, "
+    f"{len(mesh_visuals)} visual meshes."
 )
 
 control_root = ET.parse(control_urdf_path).getroot()

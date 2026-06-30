@@ -12,7 +12,7 @@ export ROS_DOMAIN_ID=$((100 + $$ % 100))
 ros2 daemon stop >/dev/null 2>&1 || true
 ros2 daemon start >/dev/null 2>&1 || true
 
-ros2 launch aim_arm_bringup software_pipeline.launch.py > /tmp/aim_rl_bringup.log 2>&1 &
+ros2 launch aim_arm_description gazebo.launch.py > /tmp/aim_rl_gazebo.log 2>&1 &
 launch_pid=$!
 
 cleanup() {
@@ -24,22 +24,21 @@ cleanup() {
 }
 trap cleanup EXIT
 
-sleep 5
+sleep 8
 
-nodes="$(ros2 node list)"
+nodes="$(ros2 node list || true)"
 echo "${nodes}"
 
-for node in \
-  /cartesian_target_node \
-  /serial_bridge_node \
-  /synthetic_camera_node \
-  /target_tracker_node; do
-  if ! grep -qx "${node}" <<< "${nodes}"; then
-    echo "Missing expected node: ${node}" >&2
-    echo "Launch log:" >&2
-    sed -n '1,160p' /tmp/aim_rl_bringup.log >&2
-    exit 1
-  fi
-done
+if ! grep -qx "/robot_state_publisher" <<< "${nodes}"; then
+  echo "robot_state_publisher did not start" >&2
+  sed -n '1,200p' /tmp/aim_rl_gazebo.log >&2
+  exit 1
+fi
 
-echo "Bringup smoke test passed."
+if ! grep -qx "/gazebo" <<< "${nodes}"; then
+  echo "gazebo ROS node did not start" >&2
+  sed -n '1,200p' /tmp/aim_rl_gazebo.log >&2
+  exit 1
+fi
+
+echo "Gazebo launch smoke test passed."

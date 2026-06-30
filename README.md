@@ -68,4 +68,10 @@ To run every local check:
 ./scripts/run_all_checks.sh
 ```
 
+To smoke-test the Gazebo launch only:
+
+```bash
+./scripts/smoke_gazebo_launch.sh
+```
+
 A lightweight GitHub Actions template is available at `docs/ci/static-checks.yml`. Full ROS/Gazebo checks remain local through `./scripts/run_all_checks.sh`.

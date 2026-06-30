@@ -7,6 +7,10 @@ set +u
 source /opt/ros/humble/setup.bash
 source "${REPO_ROOT}/colcon_ws/install/setup.bash"
 set -u
+export ROS_DOMAIN_ID=$((100 + $$ % 100))
+
+ros2 daemon stop >/dev/null 2>&1 || true
+ros2 daemon start >/dev/null 2>&1 || true
 
 ros2 launch aim_arm_bringup software_pipeline.launch.py > /tmp/aim_rl_topic_flow.log 2>&1 &
 launch_pid=$!
@@ -16,6 +20,7 @@ cleanup() {
     kill "${launch_pid}" >/dev/null 2>&1 || true
     wait "${launch_pid}" >/dev/null 2>&1 || true
   fi
+  ros2 daemon stop >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
 
@@ -46,4 +51,3 @@ for joint in \
 done
 
 echo "Topic-flow smoke test passed."
-

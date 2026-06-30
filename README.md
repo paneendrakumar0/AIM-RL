@@ -85,6 +85,14 @@ source colcon_ws/install/setup.bash
 ros2 launch aim_arm_description gazebo.launch.py
 ```
 
+Run Gazebo with controller spawning after ROS optional dependencies are installed:
+
+```bash
+source /opt/ros/humble/setup.bash
+source colcon_ws/install/setup.bash
+ros2 launch aim_arm_description controlled_gazebo.launch.py
+```
+
 Visualize the robot in RViz:
 
 ```bash

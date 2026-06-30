@@ -29,6 +29,7 @@ command -v xacro >/dev/null
 test -f "${PKG_ROOT}/package.xml"
 test -f "${PKG_ROOT}/CMakeLists.txt"
 test -f "${PKG_ROOT}/config/ros2_controllers.yaml"
+test -f "${PKG_ROOT}/launch/controlled_gazebo.launch.py"
 test -f "${PKG_ROOT}/launch/display.launch.py"
 test -f "${PKG_ROOT}/launch/gazebo.launch.py"
 test -f "${PKG_ROOT}/urdf/aim_arm.urdf.xacro"
@@ -57,6 +58,7 @@ xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
   > "${GENERATED_CONTROL_URDF}"
 
 python3 -m py_compile \
+  "${PKG_ROOT}/launch/controlled_gazebo.launch.py" \
   "${PKG_ROOT}/launch/display.launch.py" \
   "${PKG_ROOT}/launch/gazebo.launch.py" \
   "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"

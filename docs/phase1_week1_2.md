@@ -51,3 +51,9 @@ ros2 launch aim_arm_description gazebo.launch.py
 ```
 
 This launches Gazebo Classic with `aim_empty.world` and spawns the robot from `robot_description`.
+
+After ROS 2 control dependencies are installed:
+
+```bash
+ros2 launch aim_arm_description controlled_gazebo.launch.py
+```

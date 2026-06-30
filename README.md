@@ -1,0 +1,29 @@
+# AIM-RL
+
+AI-driven robotic arm software stack for simulation-first reinforcement learning, ROS 2 middleware, perception, and eventual hardware deployment.
+
+## Current Phase
+
+Phase 1, Weeks 1-2: build the ROS 2 workspace and first digital twin.
+
+This repository currently contains:
+
+- `colcon_ws/src/aim_arm_description`: ROS 2 package for a 6-DOF manipulator description.
+- `scripts/validate_phase1.sh`: repeatable validation loop for package metadata, URDF generation, XML parsing, and colcon build.
+- `docs/phase1_week1_2.md`: implementation notes and next checks.
+
+## Quick Start
+
+```bash
+cd /home/paneendra/AIM-RL
+./scripts/validate_phase1.sh
+```
+
+To visualize the robot after a successful build:
+
+```bash
+source /opt/ros/humble/setup.bash
+source colcon_ws/install/setup.bash
+ros2 launch aim_arm_description display.launch.py
+```
+

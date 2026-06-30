@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="aim_arm">
+  <xacro:property name="aim_pi" value="3.141592653589793"/>
+
+  <xacro:property name="base_height" value="0.12"/>
+  <xacro:property name="base_radius" value="0.16"/>
+  <xacro:property name="shoulder_height" value="0.16"/>
+  <xacro:property name="upper_arm_length" value="0.42"/>
+  <xacro:property name="forearm_length" value="0.36"/>
+  <xacro:property name="wrist_length" value="0.14"/>
+  <xacro:property name="tool_length" value="0.10"/>
+
+  <material name="mat_base">
+    <color rgba="0.18 0.20 0.23 1.0"/>
+  </material>
+  <material name="mat_link">
+    <color rgba="0.05 0.42 0.62 1.0"/>
+  </material>
+  <material name="mat_joint">
+    <color rgba="0.82 0.86 0.88 1.0"/>
+  </material>
+  <material name="mat_tool">
+    <color rgba="0.95 0.55 0.15 1.0"/>
+  </material>
+
+  <xacro:macro name="box_inertia" params="mass x y z">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="${mass * (y * y + z * z) / 12.0}"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="${mass * (x * x + z * z) / 12.0}"
+        iyz="0.0"
+        izz="${mass * (x * x + y * y) / 12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_inertia" params="mass radius length axis">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <xacro:if value="${axis == 'z'}">
+        <inertia
+          ixx="${mass * (3.0 * radius * radius + length * length) / 12.0}"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="${mass * (3.0 * radius * radius + length * length) / 12.0}"
+          iyz="0.0"
+          izz="${mass * radius * radius / 2.0}"/>
+      </xacro:if>
+      <xacro:if value="${axis == 'x'}">
+        <inertia
+          ixx="${mass * radius * radius / 2.0}"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="${mass * (3.0 * radius * radius + length * length) / 12.0}"
+          iyz="0.0"
+          izz="${mass * (3.0 * radius * radius + length * length) / 12.0}"/>
+      </xacro:if>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="visual_collision_box" params="size material">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${size}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${size}"/>
+      </geometry>
+    </collision>
+  </xacro:macro>
+
+  <xacro:macro name="visual_collision_cylinder" params="radius length material">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+    </collision>
+  </xacro:macro>
+
+  <link name="world"/>
+
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_link">
+    <xacro:cylinder_inertia mass="8.0" radius="${base_radius}" length="${base_height}" axis="z"/>
+    <xacro:visual_collision_cylinder radius="${base_radius}" length="${base_height}" material="mat_base"/>
+  </link>
+
+  <joint name="shoulder_pan_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="shoulder_link"/>
+    <origin xyz="0 0 ${base_height / 2.0 + shoulder_height / 2.0}" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${-pi}" upper="${aim_pi}" effort="70.0" velocity="1.5"/>
+    <dynamics damping="0.08" friction="0.02"/>
+  </joint>
+
+  <link name="shoulder_link">
+    <xacro:cylinder_inertia mass="4.0" radius="0.09" length="${shoulder_height}" axis="z"/>
+    <xacro:visual_collision_cylinder radius="0.09" length="${shoulder_height}" material="mat_joint"/>
+  </link>
+
+  <joint name="shoulder_lift_joint" type="revolute">
+    <parent link="shoulder_link"/>
+    <child link="upper_arm_link"/>
+    <origin xyz="0 0 ${shoulder_height / 2.0}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.35619" upper="2.35619" effort="80.0" velocity="1.3"/>
+    <dynamics damping="0.10" friction="0.03"/>
+  </joint>
+
+  <link name="upper_arm_link">
+    <xacro:box_inertia mass="3.2" x="${upper_arm_length}" y="0.08" z="0.08"/>
+    <visual>
+      <origin xyz="${upper_arm_length / 2.0} 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${upper_arm_length} 0.08 0.08"/>
+      </geometry>
+      <material name="mat_link"/>
+    </visual>
+    <collision>
+      <origin xyz="${upper_arm_length / 2.0} 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${upper_arm_length} 0.08 0.08"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="elbow_joint" type="revolute">
+    <parent link="upper_arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="${upper_arm_length} 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.61799" upper="2.61799" effort="60.0" velocity="1.5"/>
+    <dynamics damping="0.08" friction="0.02"/>
+  </joint>
+
+  <link name="forearm_link">
+    <xacro:box_inertia mass="2.4" x="${forearm_length}" y="0.065" z="0.065"/>
+    <visual>
+      <origin xyz="${forearm_length / 2.0} 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${forearm_length} 0.065 0.065"/>
+      </geometry>
+      <material name="mat_link"/>
+    </visual>
+    <collision>
+      <origin xyz="${forearm_length / 2.0} 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${forearm_length} 0.065 0.065"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="wrist_pitch_joint" type="revolute">
+    <parent link="forearm_link"/>
+    <child link="wrist_pitch_link"/>
+    <origin xyz="${forearm_length} 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-pi}" upper="${aim_pi}" effort="25.0" velocity="2.0"/>
+    <dynamics damping="0.05" friction="0.01"/>
+  </joint>
+
+  <link name="wrist_pitch_link">
+    <xacro:cylinder_inertia mass="0.9" radius="0.055" length="${wrist_length}" axis="x"/>
+    <visual>
+      <origin xyz="${wrist_length / 2.0} 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <geometry>
+        <cylinder radius="0.055" length="${wrist_length}"/>
+      </geometry>
+      <material name="mat_joint"/>
+    </visual>
+    <collision>
+      <origin xyz="${wrist_length / 2.0} 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <geometry>
+        <cylinder radius="0.055" length="${wrist_length}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="wrist_roll_joint" type="revolute">
+    <parent link="wrist_pitch_link"/>
+    <child link="wrist_roll_link"/>
+    <origin xyz="${wrist_length} 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="${-pi}" upper="${aim_pi}" effort="20.0" velocity="2.0"/>
+    <dynamics damping="0.04" friction="0.01"/>
+  </joint>
+
+  <link name="wrist_roll_link">
+    <xacro:cylinder_inertia mass="0.7" radius="0.045" length="0.10" axis="x"/>
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <geometry>
+        <cylinder radius="0.045" length="0.10"/>
+      </geometry>
+      <material name="mat_joint"/>
+    </visual>
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 ${aim_pi / 2.0} 0"/>
+      <geometry>
+        <cylinder radius="0.045" length="0.10"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="wrist_yaw_joint" type="revolute">
+    <parent link="wrist_roll_link"/>
+    <child link="tool_link"/>
+    <origin xyz="0.10 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${-pi}" upper="${aim_pi}" effort="20.0" velocity="2.0"/>
+    <dynamics damping="0.04" friction="0.01"/>
+  </joint>
+
+  <link name="tool_link">
+    <xacro:box_inertia mass="0.4" x="${tool_length}" y="0.04" z="0.04"/>
+    <visual>
+      <origin xyz="${tool_length / 2.0} 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${tool_length} 0.04 0.04"/>
+      </geometry>
+      <material name="mat_tool"/>
+    </visual>
+    <collision>
+      <origin xyz="${tool_length / 2.0} 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${tool_length} 0.04 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="tool0_fixed_joint" type="fixed">
+    <parent link="tool_link"/>
+    <child link="tool0"/>
+    <origin xyz="${tool_length} 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="tool0"/>
+</robot>

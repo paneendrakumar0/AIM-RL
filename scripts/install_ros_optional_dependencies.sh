@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! sudo -n true >/dev/null 2>&1; then
+if ! sudo -v; then
   cat >&2 <<'EOF'
-Passwordless sudo is not available in this shell.
+sudo authentication failed.
 Run from a terminal where sudo can prompt for your password.
 EOF
   exit 1
@@ -20,4 +20,3 @@ sudo apt install -y \
   ros-humble-ros2-controllers
 
 echo "ROS optional dependencies installed."
-

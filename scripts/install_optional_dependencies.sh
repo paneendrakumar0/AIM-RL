@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! sudo -n true >/dev/null 2>&1; then
+if ! sudo -v; then
   cat >&2 <<'EOF'
-Passwordless sudo is not available in this shell.
+sudo authentication failed.
 
 Run this script from a normal terminal where you can enter your sudo password:
 

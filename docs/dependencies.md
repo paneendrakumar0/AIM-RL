@@ -41,4 +41,4 @@ The Phase 2 bridge can build without Gymnasium/PyTorch, but real RL training nee
 ./scripts/install_rl_cpu_dependencies.sh
 ```
 
-Use `requirements-rl.txt` only when you explicitly want the default PyTorch resolver. The CPU installer is the safer development default because it avoids downloading large CUDA wheels unless you choose that path.
+Use `requirements-rl.txt` only when you explicitly want the default PyTorch resolver. The CPU installer is the safer development default because it installs Gymnasium from PyPI and Torch from the PyTorch CPU wheel index.

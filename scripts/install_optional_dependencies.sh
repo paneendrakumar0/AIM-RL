@@ -11,6 +11,6 @@ sudo apt install -y \
   ros-humble-ros2-control \
   ros-humble-ros2-controllers
 
-python3 -m pip install --user --timeout 1000 -r requirements-rl-cpu.txt
+"$(dirname "${BASH_SOURCE[0]}")/install_rl_cpu_dependencies.sh"
 
 echo "Optional dependencies installed. Re-run ./scripts/audit_dependencies.sh"

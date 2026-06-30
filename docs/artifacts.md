@@ -13,3 +13,4 @@ Current smoke outputs:
 - `artifacts/checkpoints/ppo_initial.pt`
 - `artifacts/logs/ppo_smoke.csv`
 - `artifacts/logs/policy_eval.csv`
+- `artifacts/logs/dependency_audit.txt`

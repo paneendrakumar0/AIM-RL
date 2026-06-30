@@ -110,6 +110,7 @@ Individual checks:
 ./scripts/smoke_bringup.sh
 ./scripts/smoke_topic_flow.sh
 ./scripts/smoke_rl_training.sh
+./scripts/write_dependency_report.sh
 ```
 
 The full loop currently validates:

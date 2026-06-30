@@ -139,6 +139,12 @@ The stack is useful without optional dependencies, but advanced live modes need 
 
 This installs ROS 2 control, Gazebo ROS 2 control, MoveIt, and CPU-safe Python RL dependencies from `requirements-rl-cpu.txt`.
 
+Install only ROS optional dependencies:
+
+```bash
+./scripts/install_ros_optional_dependencies.sh
+```
+
 Install only Python RL dependencies:
 
 ```bash

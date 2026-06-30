@@ -27,6 +27,12 @@ Install these before enabling simulated joint controllers:
 ./scripts/install_optional_dependencies.sh
 ```
 
+For ROS packages only:
+
+```bash
+./scripts/install_ros_optional_dependencies.sh
+```
+
 After installation, the model can be expanded with:
 
 ```bash

@@ -4,14 +4,7 @@ set -euo pipefail
 if ! sudo -n true >/dev/null 2>&1; then
   cat >&2 <<'EOF'
 Passwordless sudo is not available in this shell.
-
-Run this script from a normal terminal where you can enter your sudo password:
-
-  ./scripts/install_optional_dependencies.sh
-
-Or install only Python RL dependencies without sudo:
-
-  ./scripts/install_rl_cpu_dependencies.sh
+Run from a terminal where sudo can prompt for your password.
 EOF
   exit 1
 fi
@@ -26,6 +19,5 @@ sudo apt install -y \
   ros-humble-ros2-control \
   ros-humble-ros2-controllers
 
-"$(dirname "${BASH_SOURCE[0]}")/install_rl_cpu_dependencies.sh"
+echo "ROS optional dependencies installed."
 
-echo "Optional dependencies installed. Re-run ./scripts/audit_dependencies.sh"

@@ -8,6 +8,7 @@ CONTROL_PKG_ROOT="${WS_ROOT}/src/aim_arm_control"
 RL_PKG_ROOT="${WS_ROOT}/src/aim_arm_rl"
 PERCEPTION_PKG_ROOT="${WS_ROOT}/src/aim_arm_perception"
 HARDWARE_PKG_ROOT="${WS_ROOT}/src/aim_arm_hardware"
+BRINGUP_PKG_ROOT="${WS_ROOT}/src/aim_arm_bringup"
 GENERATED_URDF="$(mktemp)"
 GENERATED_CONTROL_URDF="$(mktemp)"
 
@@ -42,6 +43,8 @@ test -f "${PERCEPTION_PKG_ROOT}/setup.py"
 test -f "${PERCEPTION_PKG_ROOT}/aim_arm_perception/target_detector.py"
 test -f "${HARDWARE_PKG_ROOT}/package.xml"
 test -f "${HARDWARE_PKG_ROOT}/src/serial_bridge_node.cpp"
+test -f "${BRINGUP_PKG_ROOT}/package.xml"
+test -f "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
@@ -51,7 +54,8 @@ xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
 
 python3 -m py_compile \
   "${PKG_ROOT}/launch/display.launch.py" \
-  "${PKG_ROOT}/launch/gazebo.launch.py"
+  "${PKG_ROOT}/launch/gazebo.launch.py" \
+  "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"
 
 python3 - "${GENERATED_URDF}" "${GENERATED_CONTROL_URDF}" "${PKG_ROOT}/worlds/aim_empty.world" <<'PY'
 import sys

@@ -13,6 +13,7 @@ This repository currently contains:
 - `colcon_ws/src/aim_arm_rl`: Python package for the reinforcement-learning environment bridge.
 - `colcon_ws/src/aim_arm_perception`: OpenCV target tracking package for camera-to-target pose publishing.
 - `colcon_ws/src/aim_arm_hardware`: serial bridge package for microcontroller joint commands.
+- `colcon_ws/src/aim_arm_bringup`: launch package for the dry-run software pipeline.
 - `firmware/aim_arm_serial_driver`: Arduino-side packet parser scaffold.
 - `scripts/validate_phase1.sh`: repeatable validation loop for package metadata, URDF generation, XML parsing, and colcon build.
 - `docs/phase1_week1_2.md`: implementation notes and next checks.

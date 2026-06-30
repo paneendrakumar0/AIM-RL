@@ -1,0 +1,10 @@
+# Artifacts
+
+Runtime outputs are intentionally kept out of Git.
+
+Reserved local paths:
+
+- `artifacts/checkpoints/`: PyTorch policy checkpoints.
+- `artifacts/logs/`: training logs and metric exports.
+- `artifacts/renders/`: screenshots or videos from simulation.
+

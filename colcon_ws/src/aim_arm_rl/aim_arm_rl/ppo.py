@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
@@ -116,3 +117,24 @@ def build_actor_critic(config: Optional[PPOConfig] = None):
         requested_device = "cpu"
     return ActorCritic().to(requested_device)
 
+
+def save_checkpoint(model, path: str, config: Optional[PPOConfig] = None) -> None:
+    torch = require_torch()
+    checkpoint_path = Path(path)
+    checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "config": (config or PPOConfig()).__dict__,
+        },
+        checkpoint_path,
+    )
+
+
+def load_checkpoint(path: str, config: Optional[PPOConfig] = None):
+    torch = require_torch()
+    model = build_actor_critic(config)
+    checkpoint = torch.load(path, map_location=next(model.parameters()).device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    model.eval()
+    return model

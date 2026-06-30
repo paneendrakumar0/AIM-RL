@@ -59,3 +59,9 @@ To verify synthetic camera-to-trajectory topic flow:
 ```bash
 ./scripts/smoke_topic_flow.sh
 ```
+
+To run every local check:
+
+```bash
+./scripts/run_all_checks.sh
+```

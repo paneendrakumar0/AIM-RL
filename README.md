@@ -16,6 +16,8 @@ This repository currently contains:
 - `colcon_ws/src/aim_arm_bringup`: launch package for the dry-run software pipeline.
 - `firmware/aim_arm_serial_driver`: Arduino-side packet parser scaffold.
 - `artifacts/`: ignored local runtime outputs such as training checkpoints.
+
+Current build status and blockers are tracked in [docs/status.md](docs/status.md).
 - `scripts/validate_phase1.sh`: repeatable validation loop for package metadata, URDF generation, XML parsing, and colcon build.
 - `docs/phase1_week1_2.md`: implementation notes and next checks.
 

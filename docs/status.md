@@ -28,8 +28,8 @@
 
 - Gymnasium is installed.
 - CPU PyTorch is installed.
-- PPO smoke training writes checkpoint and metrics artifacts.
-- Policy evaluation smoke writes rollout metrics.
+- PPO training collects rollouts, performs clipped minibatch updates, and writes training-state checkpoints plus CSV metrics.
+- Policy evaluation loads the trained checkpoint and writes aggregate rollout metrics.
 
 ## Next Implementation Targets
 

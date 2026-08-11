@@ -22,10 +22,10 @@ fi
 "${REPO_ROOT}/scripts/smoke_bringup.sh"
 "${REPO_ROOT}/scripts/smoke_topic_flow.sh"
 
-if python3 -c "import torch, gymnasium" >/dev/null 2>&1; then
+if python3 -c "import torch" >/dev/null 2>&1; then
   "${REPO_ROOT}/scripts/smoke_rl_training.sh"
 else
-  echo "Skipping RL training smoke test; torch/gymnasium not installed."
+  echo "Skipping RL training smoke test; PyTorch not installed."
 fi
 
 echo "All AIM-RL checks passed."

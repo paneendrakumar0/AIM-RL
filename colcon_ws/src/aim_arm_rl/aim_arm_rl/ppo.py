@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional, Tuple
 
 import numpy as np
 
@@ -43,6 +43,9 @@ class RolloutBuffer:
         self.log_probs = np.zeros(config.rollout_steps, dtype=np.float32)
         self.index = 0
 
+    def reset(self) -> None:
+        self.index = 0
+
     def add(
         self,
         observation: np.ndarray,
@@ -76,6 +79,13 @@ class RolloutBuffer:
             gae = delta + self.config.gamma * self.config.gae_lambda * non_terminal * gae
             advantages[step] = gae
         return advantages[: self.index]
+
+    def returns_and_advantages(
+        self, last_value: float = 0.0
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        advantages = self.compute_advantages(last_value)
+        returns = advantages + self.values[: self.index]
+        return returns, advantages
 
 
 def require_torch():
@@ -128,26 +138,180 @@ def build_actor_critic(config: Optional[PPOConfig] = None):
     return ActorCritic().to(requested_device)
 
 
-def save_checkpoint(model, path: str, config: Optional[PPOConfig] = None) -> None:
+def save_checkpoint(
+    model,
+    path: str,
+    config: Optional[PPOConfig] = None,
+    optimizer=None,
+    update: int = 0,
+) -> None:
     torch = require_torch()
     checkpoint_path = Path(path)
     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
-    torch.save(
-        {
-            "model_state_dict": model.state_dict(),
-            "config": (config or PPOConfig()).__dict__,
-        },
-        checkpoint_path,
-    )
+    checkpoint = {
+        "model_state_dict": model.state_dict(),
+        "config": (config or PPOConfig()).__dict__,
+        "update": update,
+    }
+    if optimizer is not None:
+        checkpoint["optimizer_state_dict"] = optimizer.state_dict()
+    torch.save(checkpoint, checkpoint_path)
 
 
 def load_checkpoint(path: str, config: Optional[PPOConfig] = None):
     torch = require_torch()
+    checkpoint = torch.load(path, map_location="cpu", weights_only=False)
+    if config is None:
+        config = PPOConfig(**checkpoint.get("config", {}))
     model = build_actor_critic(config)
-    checkpoint = torch.load(path, map_location=next(model.parameters()).device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     return model
+
+
+def collect_rollout(
+    env,
+    model,
+    buffer: RolloutBuffer,
+    config: PPOConfig,
+    observation: Optional[np.ndarray] = None,
+) -> Tuple[np.ndarray, float, Dict[str, float]]:
+    torch = require_torch()
+    device = next(model.parameters()).device
+    buffer.reset()
+
+    if observation is None:
+        observation, _ = env.reset(seed=config.seed)
+
+    completed_rewards = []
+    episode_reward = 0.0
+    successes = 0
+    done = False
+
+    for _ in range(config.rollout_steps):
+        observation_tensor = torch.as_tensor(
+            observation, dtype=torch.float32, device=device
+        ).unsqueeze(0)
+        with torch.no_grad():
+            mean, std, value = model(observation_tensor)
+            distribution = torch.distributions.Normal(mean, std)
+            unsquashed_action = distribution.sample()
+            sampled_action = torch.tanh(unsquashed_action)
+            log_prob = (
+                distribution.log_prob(unsquashed_action)
+                - torch.log(1.0 - sampled_action.pow(2) + 1.0e-6)
+            ).sum(dim=-1)
+
+        env_action = sampled_action.squeeze(0).cpu().numpy().astype(np.float32)
+        next_observation, reward, terminated, truncated, info = env.step(env_action)
+        done = terminated or truncated
+        buffer.add(
+            observation,
+            env_action,
+            reward,
+            done,
+            float(value.item()),
+            float(log_prob.item()),
+        )
+
+        episode_reward += reward
+        observation = next_observation
+        if done:
+            completed_rewards.append(episode_reward)
+            successes += int(bool(info.get("touched", False)))
+            episode_reward = 0.0
+            observation, _ = env.reset()
+
+    if done:
+        last_value = 0.0
+    else:
+        with torch.no_grad():
+            observation_tensor = torch.as_tensor(
+                observation, dtype=torch.float32, device=device
+            ).unsqueeze(0)
+            _, _, value = model(observation_tensor)
+        last_value = float(value.item())
+
+    reward_samples = completed_rewards or [episode_reward]
+    metrics = {
+        "mean_episode_reward": float(np.mean(reward_samples)),
+        "episodes": float(len(completed_rewards)),
+        "successes": float(successes),
+    }
+    return observation, last_value, metrics
+
+
+def ppo_update(
+    model,
+    optimizer,
+    buffer: RolloutBuffer,
+    config: PPOConfig,
+    last_value: float = 0.0,
+) -> Dict[str, float]:
+    if buffer.index == 0:
+        raise ValueError("Cannot update PPO with an empty rollout buffer")
+
+    torch = require_torch()
+    device = next(model.parameters()).device
+    returns, advantages = buffer.returns_and_advantages(last_value)
+    advantages = (advantages - advantages.mean()) / (advantages.std() + 1.0e-8)
+
+    observations = torch.as_tensor(
+        buffer.observations[: buffer.index], dtype=torch.float32, device=device
+    )
+    actions = torch.as_tensor(
+        buffer.actions[: buffer.index], dtype=torch.float32, device=device
+    )
+    old_log_probs = torch.as_tensor(
+        buffer.log_probs[: buffer.index], dtype=torch.float32, device=device
+    )
+    returns_tensor = torch.as_tensor(returns, dtype=torch.float32, device=device)
+    advantages_tensor = torch.as_tensor(
+        advantages, dtype=torch.float32, device=device
+    )
+
+    totals = {"policy_loss": 0.0, "value_loss": 0.0, "entropy": 0.0}
+    minibatches = 0
+    for _ in range(config.update_epochs):
+        indices = torch.randperm(buffer.index, device=device)
+        for start in range(0, buffer.index, config.minibatch_size):
+            batch = indices[start : start + config.minibatch_size]
+            mean, std, values = model(observations[batch])
+            distribution = torch.distributions.Normal(mean, std)
+            bounded_actions = torch.clamp(actions[batch], -0.999999, 0.999999)
+            unsquashed_actions = torch.atanh(bounded_actions)
+            new_log_probs = (
+                distribution.log_prob(unsquashed_actions)
+                - torch.log(1.0 - bounded_actions.pow(2) + 1.0e-6)
+            ).sum(dim=-1)
+            entropy = distribution.entropy().sum(dim=-1).mean()
+
+            ratio = torch.exp(new_log_probs - old_log_probs[batch])
+            unclipped = ratio * advantages_tensor[batch]
+            clipped = torch.clamp(
+                ratio,
+                1.0 - config.clip_epsilon,
+                1.0 + config.clip_epsilon,
+            ) * advantages_tensor[batch]
+            policy_loss = -torch.min(unclipped, clipped).mean()
+            value_loss = torch.nn.functional.mse_loss(values, returns_tensor[batch])
+            loss = (
+                policy_loss
+                + config.value_coef * value_loss
+                - config.entropy_coef * entropy
+            )
+
+            optimizer.zero_grad()
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), config.max_grad_norm)
+            optimizer.step()
+
+            totals["policy_loss"] += float(policy_loss.detach().cpu().item())
+            totals["value_loss"] += float(value_loss.detach().cpu().item())
+            totals["entropy"] += float(entropy.detach().cpu().item())
+            minibatches += 1
+
+    return {name: value / minibatches for name, value in totals.items()}
 
 
 def ppo_update_smoke(config: Optional[PPOConfig] = None) -> float:

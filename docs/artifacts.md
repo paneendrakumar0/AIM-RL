@@ -10,7 +10,7 @@ Reserved local paths:
 
 Current smoke outputs:
 
-- `artifacts/checkpoints/ppo_initial.pt`
-- `artifacts/logs/ppo_smoke.csv`
+- `artifacts/checkpoints/ppo_latest.pt`
+- `artifacts/logs/ppo_training.csv`
 - `artifacts/logs/policy_eval.csv`
 - `artifacts/logs/dependency_audit.txt`

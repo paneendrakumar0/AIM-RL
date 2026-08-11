@@ -23,7 +23,7 @@ synthetic or Gazebo camera -> OpenCV target tracker -> Cartesian IK -> JointTraj
 - **Gazebo Classic world** with table, target block, overhead camera, and robot spawn launch.
 - **OpenCV perception** that turns camera frames into `/aim_arm/target_pose`.
 - **C++ motion command node** that publishes six-joint trajectories from Cartesian targets.
-- **RL bridge** with Gym-style environment, reward logic, PPO scaffold, rollout buffer, and checkpoint path.
+- **RL bridge** with Gym-style environment, reward logic, clipped PPO training, metrics, and checkpoint evaluation.
 - **MoveIt planning pipeline** with SRDF planning group, OMPL, KDL, joint limits, and simulated controller mapping.
 - **Hardware bridge** that clamps joint commands and emits checksum-protected serial packets.
 - **Arduino firmware scaffold** for parsing laptop-to-microcontroller command packets.
@@ -142,7 +142,7 @@ The full loop currently validates:
 - MoveIt `move_group` startup when MoveIt 2 is installed.
 - Dry-run bringup.
 - Synthetic camera to trajectory topic flow.
-- PPO model initialization and checkpoint save when Torch/Gymnasium are installed.
+- PPO rollout training, checkpoint save, and policy evaluation when PyTorch is installed.
 
 ## Optional Dependencies
 

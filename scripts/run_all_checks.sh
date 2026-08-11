@@ -14,10 +14,13 @@ else
   echo "Skipping controlled Gazebo smoke test; ros2_control packages not installed."
 fi
 if ros2 pkg prefix moveit_ros_move_group >/dev/null 2>&1 && \
-  ros2 pkg prefix moveit_configs_utils >/dev/null 2>&1; then
+  ros2 pkg prefix moveit_configs_utils >/dev/null 2>&1 && \
+  ros2 pkg prefix controller_manager >/dev/null 2>&1 && \
+  ros2 pkg prefix gazebo_ros2_control >/dev/null 2>&1; then
   "${REPO_ROOT}/scripts/smoke_moveit_planning.sh"
+  "${REPO_ROOT}/scripts/smoke_moveit_execution.sh"
 else
-  echo "Skipping MoveIt planning smoke test; MoveIt 2 packages not installed."
+  echo "Skipping MoveIt execution checks; MoveIt/ros2_control packages not installed."
 fi
 "${REPO_ROOT}/scripts/smoke_bringup.sh"
 "${REPO_ROOT}/scripts/smoke_topic_flow.sh"

@@ -57,8 +57,11 @@ test -f "${MOVEIT_PKG_ROOT}/config/aim_arm.srdf"
 test -f "${MOVEIT_PKG_ROOT}/config/aim_arm.urdf.xacro"
 test -f "${MOVEIT_PKG_ROOT}/config/moveit_controllers.yaml"
 test -f "${MOVEIT_PKG_ROOT}/config/ompl_planning.yaml"
+test -f "${MOVEIT_PKG_ROOT}/config/moveit.rviz"
 test -f "${MOVEIT_PKG_ROOT}/launch/move_group.launch.py"
+test -f "${MOVEIT_PKG_ROOT}/launch/moveit_rviz.launch.py"
 test -f "${MOVEIT_PKG_ROOT}/launch/planning_simulation.launch.py"
+test -f "${MOVEIT_PKG_ROOT}/src/plan_execution_smoke.cpp"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
@@ -72,6 +75,7 @@ python3 -m py_compile \
   "${PKG_ROOT}/launch/gazebo.launch.py" \
   "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py" \
   "${MOVEIT_PKG_ROOT}/launch/move_group.launch.py" \
+  "${MOVEIT_PKG_ROOT}/launch/moveit_rviz.launch.py" \
   "${MOVEIT_PKG_ROOT}/launch/planning_simulation.launch.py"
 
 python3 - "${MOVEIT_PKG_ROOT}/config/moveit_controllers.yaml" "${MOVEIT_PKG_ROOT}/config/ompl_planning.yaml" <<'PY'

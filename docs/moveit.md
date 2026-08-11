@@ -10,6 +10,8 @@
 - A MoveIt controller mapping to the simulated `arm_controller` trajectory action.
 - A standalone `move_group.launch.py` launch file.
 - A `planning_simulation.launch.py` launch file that combines controlled Gazebo and MoveIt.
+- An RViz configuration with the MoveIt MotionPlanning display.
+- A C++ plan-execution smoke client that plans and executes the named `ready` state.
 
 Install the optional ROS dependencies before running the planning pipeline:
 
@@ -27,5 +29,11 @@ source install/setup.bash
 ros2 launch aim_arm_moveit_config planning_simulation.launch.py
 ```
 
-The base validation loop checks the launch syntax and planning/controller configuration even when MoveIt is unavailable. When MoveIt is installed, `scripts/run_all_checks.sh` also starts `move_group` and verifies that its ROS node is available.
+The base validation loop checks the launch syntax and planning/controller configuration even when MoveIt is unavailable. When MoveIt and ROS control are installed, `scripts/run_all_checks.sh` starts `move_group`, launches controlled Gazebo, and verifies an executed plan through `arm_controller`.
+
+Run the execution check directly with:
+
+```bash
+./scripts/smoke_moveit_execution.sh
+```
 

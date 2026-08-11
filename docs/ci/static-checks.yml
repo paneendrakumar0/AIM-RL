@@ -32,6 +32,7 @@ jobs:
           test -x scripts/run_all_checks.sh
           test -x scripts/smoke_bringup.sh
           test -x scripts/smoke_moveit_planning.sh
+          test -x scripts/smoke_moveit_execution.sh
           test -x scripts/smoke_topic_flow.sh
           test -x scripts/validate_phase1.sh
           test -x scripts/validate_stack.sh

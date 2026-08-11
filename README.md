@@ -24,7 +24,7 @@ synthetic or Gazebo camera -> OpenCV target tracker -> Cartesian IK -> JointTraj
 - **OpenCV perception** that turns camera frames into `/aim_arm/target_pose`.
 - **C++ motion command node** that publishes six-joint trajectories from Cartesian targets.
 - **RL bridge** with Gym-style environment, reward logic, clipped PPO training, metrics, and checkpoint evaluation.
-- **MoveIt planning pipeline** with SRDF planning group, OMPL, KDL, joint limits, and simulated controller mapping.
+- **MoveIt planning pipeline** with SRDF, OMPL, KDL, RViz MotionPlanning, and simulated plan execution.
 - **Hardware bridge** that clamps joint commands and emits checksum-protected serial packets.
 - **Arduino firmware scaffold** for parsing laptop-to-microcontroller command packets.
 - **End-to-end smoke tests** for build, Gazebo launch, bringup, and camera-to-trajectory topic flow.
@@ -118,6 +118,7 @@ Individual checks:
 ./scripts/smoke_controlled_gazebo.sh
 ./scripts/smoke_controlled_trajectory.sh
 ./scripts/smoke_moveit_planning.sh
+./scripts/smoke_moveit_execution.sh
 ./scripts/smoke_bringup.sh
 ./scripts/smoke_topic_flow.sh
 ./scripts/smoke_rl_training.sh
@@ -140,6 +141,7 @@ The full loop currently validates:
 - Controlled Gazebo launch and controller spawning when ROS 2 control packages are installed.
 - Controlled trajectory command acceptance and `/joint_states` publication.
 - MoveIt `move_group` startup when MoveIt 2 is installed.
+- MoveIt plan execution through the simulated arm controller.
 - Dry-run bringup.
 - Synthetic camera to trajectory topic flow.
 - PPO rollout training, checkpoint save, and policy evaluation when PyTorch is installed.
@@ -213,12 +215,10 @@ Currently validated:
 - Gazebo camera world launches.
 - Synthetic perception pipeline produces trajectories.
 - Hardware bridge produces dry-run serial packets.
-- MoveIt scaffold parses and installs.
+- MoveIt plans and executes trajectories through controlled Gazebo.
 
 Current blockers for advanced live execution:
 
-- MoveIt 2 is not installed until optional dependencies are installed.
-- `gazebo_ros2_control` is not installed until optional dependencies are installed.
 - Physical serial write verification needs a connected microcontroller.
 
 ## Documentation
@@ -237,10 +237,9 @@ Current blockers for advanced live execution:
 
 ## Roadmap
 
-- Install optional dependencies and enable live `gazebo_ros2_control`.
-- Add RViz MotionPlanning configuration and plan-execution coverage.
+- Synchronize Gazebo workcell collision objects into the MoveIt planning scene.
 - Replace the mock RL backend with a ROS/Gazebo stepping backend.
-- Add training metrics, TensorBoard logs, and checkpoint evaluation.
+- Add TensorBoard reward and success-rate visualization.
 - Map Arduino parsed commands to selected actuator hardware.
 - Add real camera calibration or depth-based target estimation.
 

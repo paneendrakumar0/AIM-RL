@@ -10,15 +10,18 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>aim_arm_description</exec_depend>
+  <depend>geometry_msgs</depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>moveit_configs_utils</exec_depend>
   <exec_depend>moveit_kinematics</exec_depend>
   <exec_depend>moveit_planners_ompl</exec_depend>
   <exec_depend>moveit_ros_move_group</exec_depend>
+  <depend>moveit_msgs</depend>
   <depend>moveit_ros_planning_interface</depend>
   <exec_depend>moveit_ros_visualization</exec_depend>
   <exec_depend>moveit_simple_controller_manager</exec_depend>
   <depend>rclcpp</depend>
+  <depend>shape_msgs</depend>
   <exec_depend>rviz2</exec_depend>
 
   <export>

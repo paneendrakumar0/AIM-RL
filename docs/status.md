@@ -16,6 +16,7 @@
 - Dry-run serial bridge encodes clamped joint packets.
 - MoveIt configuration defines the planning group, OMPL pipeline, joint limits, and trajectory controller mapping.
 - MoveIt plans and executes the named `ready` state through the simulated trajectory controller.
+- MoveIt mirrors the Gazebo tabletop and target block into its planning scene.
 - Topic-flow smoke test confirms camera -> target pose -> joint trajectory.
 - CPU PyTorch and Gymnasium are installed for RL trainer initialization.
 
@@ -32,6 +33,5 @@
 
 ## Next Implementation Targets
 
-- Add collision objects from the Gazebo workcell to the MoveIt planning scene.
 - Add a ROS/Gazebo stepping backend for the RL environment.
 - Expand Arduino firmware from parsing-only to actuator pin output once hardware is selected.

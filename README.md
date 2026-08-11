@@ -150,6 +150,7 @@ The full loop currently validates:
 - Controlled trajectory command acceptance and `/joint_states` publication.
 - MoveIt `move_group` startup when MoveIt 2 is installed.
 - MoveIt plan execution through the simulated arm controller.
+- Gazebo tabletop and target-block collision objects in the MoveIt planning scene.
 - Dry-run bringup.
 - Synthetic camera to trajectory topic flow.
 - PPO rollout training, checkpoint save, and policy evaluation when PyTorch is installed.
@@ -246,7 +247,6 @@ Current blockers for advanced live execution:
 
 ## Roadmap
 
-- Synchronize Gazebo workcell collision objects into the MoveIt planning scene.
 - Replace the mock RL backend with a ROS/Gazebo stepping backend.
 - Add TensorBoard reward and success-rate visualization.
 - Map Arduino parsed commands to selected actuator hardware.

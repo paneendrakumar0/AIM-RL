@@ -3,6 +3,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -34,6 +35,12 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(move_group),
                 launch_arguments={"use_sim_time": "true"}.items(),
+            ),
+            Node(
+                package="aim_arm_moveit_config",
+                executable="planning_scene_loader",
+                parameters=[{"use_sim_time": True}],
+                output="screen",
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(moveit_rviz),

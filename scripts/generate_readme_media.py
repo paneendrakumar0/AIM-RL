@@ -236,7 +236,7 @@ def save_findings_summary():
     findings = [
         (
             "Planning",
-            "OMPL RRTConnect planned\nthe named ready state.",
+            "OMPL planned with two\nworkcell collision objects.",
             PALETTE["blue"],
             "PASS",
         ),
@@ -276,7 +276,7 @@ def save_findings_summary():
     d.text((95, 723), "Recommended next", font=font(24, True), fill=PALETTE["ink"])
     d.text(
         (95, 770),
-        "1  Mirror Gazebo collision geometry in MoveIt    2  Add synchronous RL stepping    3  Require a real camera frame in CI",
+        "1  Add synchronous RL stepping    2  Measure planning quality    3  Require a real camera frame in CI",
         font=font(20),
         fill=PALETTE["muted"],
     )

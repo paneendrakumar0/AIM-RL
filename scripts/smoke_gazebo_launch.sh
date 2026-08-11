@@ -43,4 +43,10 @@ if ! grep -qx "/gazebo" <<< "${nodes}"; then
   exit 1
 fi
 
+if [[ -n "${CAPTURE_IMAGE_PATH:-}" ]]; then
+  python3 "${REPO_ROOT}/scripts/capture_ros_image.py" \
+    --topic "${CAPTURE_IMAGE_TOPIC:-/camera/image_raw}" \
+    --output "${CAPTURE_IMAGE_PATH}"
+fi
+
 echo "Gazebo launch smoke test passed."

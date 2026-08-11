@@ -16,6 +16,7 @@ sudo apt install -y \
   ros-humble-cv-bridge \
   ros-humble-gazebo-ros2-control \
   ros-humble-gazebo-ros-pkgs \
+  ros-humble-gazebo-plugins \
   ros-humble-joint-state-broadcaster \
   ros-humble-joint-trajectory-controller \
   ros-humble-moveit \

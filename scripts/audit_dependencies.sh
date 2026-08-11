@@ -8,6 +8,7 @@ set -u
 required_ros_packages=(
   ament_cmake
   gazebo_ros
+  gazebo_plugins
   geometry_msgs
   rclcpp
   rclpy
@@ -66,4 +67,3 @@ for module in "${python_modules[@]}"; do
 done
 
 exit "${exit_code:-0}"
-

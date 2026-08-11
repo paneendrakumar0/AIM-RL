@@ -50,4 +50,19 @@ if ! ros2 run aim_arm_moveit_config plan_execution_smoke; then
   exit 1
 fi
 
+if [[ -n "${CAPTURE_IMAGE_PATH:-}" ]]; then
+  capture_topic="${CAPTURE_IMAGE_TOPIC:-/camera/image_raw}"
+  if ! python3 "${REPO_ROOT}/scripts/capture_ros_image.py" \
+    --topic "${capture_topic}" \
+    --output "${CAPTURE_IMAGE_PATH}"; then
+    echo "Available ROS topics:" >&2
+    ros2 topic list >&2 || true
+    ros2 topic info --verbose "${capture_topic}" >&2 || true
+    echo "Available Gazebo topics:" >&2
+    gz topic -l >&2 || true
+    sed -n '1,360p' /tmp/aim_rl_moveit_execution.log >&2
+    exit 1
+  fi
+fi
+
 echo "MoveIt plan-execution smoke test passed."

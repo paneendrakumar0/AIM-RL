@@ -39,6 +39,14 @@ synthetic or Gazebo camera -> OpenCV target tracker -> Cartesian IK -> JointTraj
 | --- | --- |
 | ![Validation pass](media/screenshots/validation_pass.png) | ![Dependency audit](media/screenshots/dependency_audit.png) |
 
+## Simulation Evidence and Findings
+
+| Gazebo workcell definition | Validated findings |
+| --- | --- |
+| ![Gazebo digital twin workcell](media/screenshots/gazebo_world_overview.png) | ![MoveIt validation findings](media/screenshots/moveit_validation_findings.png) |
+
+The workcell image is reproducibly generated from the tracked world definition. The validation card summarizes live ROS 2, Gazebo, controller, and MoveIt checks. See [findings and recommendations](docs/findings_and_recommendations.md) for the evidence, the WSLg camera-rendering limitation found during capture, and prioritized next work.
+
 ## Repository Map
 
 ```text
@@ -228,6 +236,7 @@ Current blockers for advanced live execution:
 - [MoveIt](docs/moveit.md)
 - [Artifacts](docs/artifacts.md)
 - [Project Status](docs/status.md)
+- [Findings and Recommendations](docs/findings_and_recommendations.md)
 - [Phase 1 Digital Twin](docs/phase1_week1_2.md)
 - [Phase 1 Motion Node](docs/phase1_week5_6.md)
 - [Phase 2 RL Bridge](docs/phase2_week7_8.md)

@@ -127,7 +127,7 @@ def save_gazebo_world():
     d.polygon([(650, 205), (730, 205), (1100, 710), (280, 710)], outline=PALETTE["teal"], fill=None)
     d.line([(650, 205), (280, 710)], fill=PALETTE["teal"], width=3)
     d.line([(730, 205), (1100, 710)], fill=PALETTE["teal"], width=3)
-    d.text((595, 108), "overhead_camera", font=h, fill=PALETTE["ink"])
+    d.text((595, 210), "overhead_camera", font=h, fill=PALETTE["ink"])
 
     d.text((80, 820), "Smoke-tested launch: /gazebo, /gazebo_ros_camera, /robot_state_publisher", font=font(22), fill=PALETTE["ink"])
     img.save(SCREENSHOTS / "gazebo_world_overview.png")
@@ -222,6 +222,67 @@ def save_topic_flow_recording():
     )
 
 
+def save_findings_summary():
+    img = Image.new("RGB", (1500, 900), PALETTE["paper"])
+    d = ImageDraw.Draw(img)
+    d.text((70, 48), "Live Simulation Findings", font=font(52, True), fill=PALETTE["ink"])
+    d.text(
+        (72, 116),
+        "ROS 2 Humble + Gazebo Classic + MoveIt 2 validation",
+        font=font(24),
+        fill=PALETTE["muted"],
+    )
+
+    findings = [
+        (
+            "Planning",
+            "OMPL RRTConnect planned\nthe named ready state.",
+            PALETTE["blue"],
+            "PASS",
+        ),
+        (
+            "Execution",
+            "FollowJointTrajectory finished\nthrough arm_controller.",
+            PALETTE["green"],
+            "PASS",
+        ),
+        (
+            "Simulation",
+            "Gazebo published joint states;\ncamera topics are advertised.",
+            PALETTE["orange"],
+            "PARTIAL",
+        ),
+        (
+            "Workspace",
+            "Seven ROS packages built;\nsix controlled joints verified.",
+            PALETTE["orange"],
+            "PASS",
+        ),
+    ]
+
+    for index, (name, detail, color, status) in enumerate(findings):
+        column = index % 2
+        row = index // 2
+        x = 70 + column * 715
+        y = 190 + row * 240
+        rounded_rect(d, (x, y, x + 650, y + 195), 18, PALETTE["panel"], PALETTE["line"], 2)
+        d.rectangle((x, y, x + 12, y + 195), fill=color)
+        d.text((x + 36, y + 28), name, font=font(28, True), fill=PALETTE["ink"])
+        d.multiline_text((x + 36, y + 78), detail, font=font(22), fill=PALETTE["muted"], spacing=7)
+        rounded_rect(d, (x + 510, y + 25, x + 615, y + 67), 12, color)
+        d.text((x + 529, y + 32), status, font=font(20, True), fill=(255, 255, 255))
+
+    rounded_rect(d, (70, 700, 1430, 830), 18, (239, 244, 248), PALETTE["line"], 2)
+    d.text((95, 723), "Recommended next", font=font(24, True), fill=PALETTE["ink"])
+    d.text(
+        (95, 770),
+        "1  Mirror Gazebo collision geometry in MoveIt    2  Add synchronous RL stepping    3  Require a real camera frame in CI",
+        font=font(20),
+        fill=PALETTE["muted"],
+    )
+    img.save(SCREENSHOTS / "moveit_validation_findings.png")
+
+
 def main():
     SCREENSHOTS.mkdir(parents=True, exist_ok=True)
     RECORDINGS.mkdir(parents=True, exist_ok=True)
@@ -229,6 +290,7 @@ def main():
     save_gazebo_world()
     save_perception()
     save_topic_flow_recording()
+    save_findings_summary()
 
     validation_text = command_output(["./scripts/validate_stack.sh"])
     save_terminal_screenshot("validation_pass.png", "./scripts/validate_stack.sh", validation_text)

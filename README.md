@@ -24,7 +24,7 @@ synthetic or Gazebo camera -> OpenCV target tracker -> Cartesian IK -> JointTraj
 - **OpenCV perception** that turns camera frames into `/aim_arm/target_pose`.
 - **C++ motion command node** that publishes six-joint trajectories from Cartesian targets.
 - **RL bridge** with Gym-style environment, reward logic, PPO scaffold, rollout buffer, and checkpoint path.
-- **MoveIt scaffold** with SRDF planning group, named states, KDL settings, and joint limits.
+- **MoveIt planning pipeline** with SRDF planning group, OMPL, KDL, joint limits, and simulated controller mapping.
 - **Hardware bridge** that clamps joint commands and emits checksum-protected serial packets.
 - **Arduino firmware scaffold** for parsing laptop-to-microcontroller command packets.
 - **End-to-end smoke tests** for build, Gazebo launch, bringup, and camera-to-trajectory topic flow.
@@ -117,6 +117,7 @@ Individual checks:
 ./scripts/smoke_gazebo_launch.sh
 ./scripts/smoke_controlled_gazebo.sh
 ./scripts/smoke_controlled_trajectory.sh
+./scripts/smoke_moveit_planning.sh
 ./scripts/smoke_bringup.sh
 ./scripts/smoke_topic_flow.sh
 ./scripts/smoke_rl_training.sh
@@ -129,6 +130,7 @@ The full loop currently validates:
 - Optional `ros2_control` XML expansion.
 - Gazebo world XML.
 - MoveIt SRDF planning group.
+- MoveIt OMPL pipeline and trajectory-controller mapping.
 - `colcon build --symlink-install`.
 - C++ IK smoke test.
 - Serial packet smoke test.
@@ -137,6 +139,7 @@ The full loop currently validates:
 - Gazebo launch.
 - Controlled Gazebo launch and controller spawning when ROS 2 control packages are installed.
 - Controlled trajectory command acceptance and `/joint_states` publication.
+- MoveIt `move_group` startup when MoveIt 2 is installed.
 - Dry-run bringup.
 - Synthetic camera to trajectory topic flow.
 - PPO model initialization and checkpoint save when Torch/Gymnasium are installed.
@@ -235,7 +238,7 @@ Current blockers for advanced live execution:
 ## Roadmap
 
 - Install optional dependencies and enable live `gazebo_ros2_control`.
-- Expand MoveIt launch and planning pipelines.
+- Add RViz MotionPlanning configuration and plan-execution coverage.
 - Replace the mock RL backend with a ROS/Gazebo stepping backend.
 - Add training metrics, TensorBoard logs, and checkpoint evaluation.
 - Map Arduino parsed commands to selected actuator hardware.

@@ -54,6 +54,11 @@ test -f "${BRINGUP_PKG_ROOT}/package.xml"
 test -f "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"
 test -f "${MOVEIT_PKG_ROOT}/package.xml"
 test -f "${MOVEIT_PKG_ROOT}/config/aim_arm.srdf"
+test -f "${MOVEIT_PKG_ROOT}/config/aim_arm.urdf.xacro"
+test -f "${MOVEIT_PKG_ROOT}/config/moveit_controllers.yaml"
+test -f "${MOVEIT_PKG_ROOT}/config/ompl_planning.yaml"
+test -f "${MOVEIT_PKG_ROOT}/launch/move_group.launch.py"
+test -f "${MOVEIT_PKG_ROOT}/launch/planning_simulation.launch.py"
 
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" > "${GENERATED_URDF}"
 xacro "${PKG_ROOT}/urdf/aim_arm.urdf.xacro" \
@@ -65,7 +70,30 @@ python3 -m py_compile \
   "${PKG_ROOT}/launch/controlled_gazebo.launch.py" \
   "${PKG_ROOT}/launch/display.launch.py" \
   "${PKG_ROOT}/launch/gazebo.launch.py" \
-  "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py"
+  "${BRINGUP_PKG_ROOT}/launch/software_pipeline.launch.py" \
+  "${MOVEIT_PKG_ROOT}/launch/move_group.launch.py" \
+  "${MOVEIT_PKG_ROOT}/launch/planning_simulation.launch.py"
+
+python3 - "${MOVEIT_PKG_ROOT}/config/moveit_controllers.yaml" "${MOVEIT_PKG_ROOT}/config/ompl_planning.yaml" <<'PY'
+import sys
+
+import yaml
+
+controllers = yaml.safe_load(open(sys.argv[1], encoding="utf-8"))
+planning = yaml.safe_load(open(sys.argv[2], encoding="utf-8"))
+
+manager = controllers.get("moveit_simple_controller_manager", {})
+names = manager.get("controller_names", [])
+if names != ["arm_controller"]:
+    raise SystemExit("MoveIt controller list must contain arm_controller")
+if len(manager["arm_controller"].get("joints", [])) != 6:
+    raise SystemExit("MoveIt arm_controller must contain six joints")
+if planning.get("planning_plugin") != "ompl_interface/OMPLPlanner":
+    raise SystemExit("MoveIt OMPL planning plugin is not configured")
+if "arm" not in planning:
+    raise SystemExit("MoveIt OMPL configuration is missing the arm group")
+print("MoveIt planning and controller YAML validation passed.")
+PY
 
 python3 - "${GENERATED_URDF}" "${GENERATED_CONTROL_URDF}" "${PKG_ROOT}/worlds/aim_empty.world" "${MOVEIT_PKG_ROOT}/config/aim_arm.srdf" <<'PY'
 import sys

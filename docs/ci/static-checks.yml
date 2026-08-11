@@ -22,6 +22,7 @@ jobs:
             colcon_ws/src/aim_arm_bringup/launch/software_pipeline.launch.py \
             colcon_ws/src/aim_arm_description/launch/display.launch.py \
             colcon_ws/src/aim_arm_description/launch/gazebo.launch.py \
+            colcon_ws/src/aim_arm_moveit_config/launch/*.py \
             colcon_ws/src/aim_arm_perception/aim_arm_perception/*.py \
             colcon_ws/src/aim_arm_rl/aim_arm_rl/*.py
 
@@ -30,6 +31,7 @@ jobs:
           test -x scripts/audit_dependencies.sh
           test -x scripts/run_all_checks.sh
           test -x scripts/smoke_bringup.sh
+          test -x scripts/smoke_moveit_planning.sh
           test -x scripts/smoke_topic_flow.sh
           test -x scripts/validate_phase1.sh
           test -x scripts/validate_stack.sh

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="aim_arm">
+  <xacro:include filename="$(find aim_arm_description)/urdf/aim_arm.urdf.xacro"/>
+</robot>
